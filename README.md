@@ -1,11 +1,3 @@
-<h1 align="center">
-  <br>
-  <img src="https://via.placeholder.com/120?text=RPS" alt="RPS OBE" width="120">
-  <br>
-  RPS OBE
-  <br>
-</h1>
-
 <h4 align="center">Smart Outcome Based Education Platform</h4>
 
 <p align="center">
