@@ -1,6 +1,2 @@
-@import "tailwindcss";
-
-@config "../tailwind.config.js";
-
 @import "@tabler/core/dist/css/tabler.min.css";
 @import "@tabler/icons-webfont/dist/tabler-icons.min.css";

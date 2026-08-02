@@ -4,7 +4,8 @@ return [
     App\Providers\AppServiceProvider::class,
     App\Providers\EventServiceProvider::class,
     App\Providers\TraitServiceProvider::class,
-    Spatie\Permission\PermissionServiceProvider::class,
-    Maatwebsite\Excel\ExcelServiceProvider::class,
+    App\Providers\VoltServiceProvider::class,
     Barryvdh\DomPDF\ServiceProvider::class,
+    Maatwebsite\Excel\ExcelServiceProvider::class,
+    Spatie\Permission\PermissionServiceProvider::class,
 ];

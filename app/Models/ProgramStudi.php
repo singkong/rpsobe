@@ -64,11 +64,6 @@ class ProgramStudi extends Model
         return $this->hasMany(Kurikulum::class);
     }
 
-    public function users(): HasMany
-    {
-        return $this->hasMany(User::class);
-    }
-
     public function profilLulusan(): HasMany
     {
         return $this->hasMany(ProfilLulusan::class);
