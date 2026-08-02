@@ -1,0 +1,64 @@
+<x-layouts.auth title="Lupa Password">
+    <div class="card card-md">
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">Lupa Password</h2>
+            <p class="text-secondary mb-4">Masukkan email Anda dan kami akan mengirimkan tautan untuk mereset password.</p>
+
+            @if (session('status'))
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10"/>
+                            </svg>
+                        </div>
+                        <div>{{ session('status') }}</div>
+                    </div>
+                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/><path d="M12 8v4"/><path d="M12 16h.01"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <ul class="mb-0 ps-3">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+            @endif
+
+            <form wire:submit="sendResetLink">
+                <div class="mb-3">
+                    <label class="form-label" for="email">Email</label>
+                    <input type="email" id="email" wire:model="email" class="form-control @error('email') is-invalid @enderror" placeholder="email@example.com" required autofocus>
+                    @error('email')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary w-100" wire:loading.attr="disabled">
+                        <span wire:loading.remove wire:target="sendResetLink">Kirim Tautan Reset</span>
+                        <span wire:loading wire:target="sendResetLink">
+                            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                            Mengirim...
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="card-footer text-center">
+            <a href="{{ route('login') }}" wire:navigate>Kembali ke halaman login</a>
+        </div>
+    </div>
+</x-layouts.auth>

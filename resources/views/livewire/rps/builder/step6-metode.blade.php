@@ -1,0 +1,74 @@
+<div>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Metode Pembelajaran</h3>
+            <span class="badge bg-primary-lt ms-auto">{{ count($metodeMap) }} Pertemuan</span>
+        </div>
+        <div class="card-body">
+            @if(count($metodeMap) === 0)
+                <div class="alert alert-info">Belum ada materi pertemuan. Silakan isi materi pada Step 5 terlebih dahulu.</div>
+            @else
+                <div class="table-responsive">
+                    <table class="table table-vcenter card-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px">Pertemuan</th>
+                                <th style="width: 300px">Materi</th>
+                                <th>Metode Pembelajaran</th>
+                                <th style="width: 60px">Jml</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($metodeMap as $pertemuanKe => $data)
+                                @php
+                                    $selectedMetode = $data['selected_metode'] ?? [];
+                                    $metodeCount = count($selectedMetode);
+                                @endphp
+                                <tr>
+                                    <td><span class="badge bg-primary">{{ $pertemuanKe }}</span></td>
+                                    <td class="text-wrap small">{{ Str::limit($data['materi'] ?? '-', 100) }}</td>
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-1">
+                                            @foreach($allMetode as $metode)
+                                                @php
+                                                    $isSelected = in_array($metode, $selectedMetode);
+                                                    $color = $metodeColors[$metode] ?? 'gray';
+                                                @endphp
+                                                <button type="button"
+                                                        wire:click="toggleMetode({{ $pertemuanKe }}, @js($metode))"
+                                                        class="btn btn-sm {{ $isSelected ? 'bg-'.$color.' text-white' : 'btn-outline-secondary' }} mb-1"
+                                                        style="font-size: 12px; padding: 2px 8px;"
+                                                        title="{{ $metode }}">
+                                                    {{ Str::limit($metode, 20) }}
+                                                </button>
+                                            @endforeach
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge {{ $metodeCount > 0 ? 'bg-primary-lt' : 'bg-danger-lt' }}">
+                                            {{ $metodeCount }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+
+            <div class="d-flex justify-content-end mt-3">
+                <button wire:click="save" class="btn btn-primary" wire:loading.attr="disabled">
+                    <span wire:loading.remove wire:target="save">Simpan Metode</span>
+                    <span wire:loading wire:target="save">Menyimpan...</span>
+                </button>
+            </div>
+
+            @if($saved)
+                <div class="alert alert-success mt-2 mb-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke="none" d="M0 0h24v24H0z"/><path d="M5 12l5 5l10 -10"/></svg>
+                    Metode pembelajaran berhasil disimpan.
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
