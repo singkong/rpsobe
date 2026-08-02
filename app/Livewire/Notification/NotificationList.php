@@ -20,6 +20,15 @@ class NotificationList extends Component
         //
     }
 
+    public function getNotificationsProperty()
+    {
+        return Notification::where('user_id', Auth::id())
+            ->when($this->filterRead === 'unread', fn($q) => $q->whereNull('read_at'))
+            ->when($this->filterRead === 'read', fn($q) => $q->whereNotNull('read_at'))
+            ->latest()
+            ->paginate($this->perPage);
+    }
+
     public function notificationList()
     {
         $user = Auth::user();

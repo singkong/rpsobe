@@ -18,7 +18,7 @@
             <div class="card">
                 <div class="card-body text-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon text-primary mb-2"><path stroke="none" d="M0 0h24v24H0z"/><path d="M3 21l18 0"/><path d="M3 7v1a4 4 0 0 0 4 4h10a4 4 0 0 0 4 -4v-1"/><path d="M12 11l0 10"/><path d="M9 3h6l3 5h-12z"/></svg>
-                    <h3 class="mb-0">{{ $totalFakultas() }} / {{ $totalProdi() }}</h3>
+                    <h3 class="mb-0">{{ $totalFakultas }} / {{ $totalProdi }}</h3>
                     <p class="text-secondary">Fakultas / Program Studi</p>
                 </div>
             </div>
@@ -27,7 +27,7 @@
             <div class="card">
                 <div class="card-body text-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon text-green mb-2"><path stroke="none" d="M0 0h24v24H0z"/><path d="M5 5h3m4 0h9"/><path d="M3 10h11m4 0h1"/><path d="M5 15h5m4 0h8"/><path d="M3 20h9m4 0h3"/></svg>
-                    <h3 class="mb-0">{{ $totalKurikulum() }} / {{ $totalMataKuliah() }}</h3>
+                    <h3 class="mb-0">{{ $totalKurikulum }} / {{ $totalMataKuliah }}</h3>
                     <p class="text-secondary">Kurikulum / Mata Kuliah</p>
                 </div>
             </div>
@@ -36,7 +36,7 @@
             <div class="card">
                 <div class="card-body text-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon text-purple mb-2"><path stroke="none" d="M0 0h24v24H0z"/><path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0 -3 -3.85"/></svg>
-                    <h3 class="mb-0">{{ $totalDosen() }} / {{ $totalCpl() }}</h3>
+                    <h3 class="mb-0">{{ $totalDosen }} / {{ $totalCpl }}</h3>
                     <p class="text-secondary">Dosen / CPL</p>
                 </div>
             </div>

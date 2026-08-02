@@ -28,6 +28,11 @@ class AuditViewer extends Component
         //
     }
 
+    public function getAuditsProperty()
+    {
+        return $this->auditList();
+    }
+
     public function auditList()
     {
         $query = AuditLog::with('user')->latest();

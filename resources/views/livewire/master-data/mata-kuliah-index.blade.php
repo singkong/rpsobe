@@ -34,7 +34,7 @@
             <table class="table table-vcenter card-table table-striped">
                 <thead>
                     <tr>
-                        <th class="w-1"><input type="checkbox" class="form-check-input" wire:model.live="selectedItems" wire:click="$toggleSelectAll"></th>
+                        <th class="w-1"><input type="checkbox" class="form-check-input" wire:click="toggleSelectAll"></th>
                         <th wire:click="sortBy('code')" style="cursor:pointer">Kode</th>
                         <th wire:click="sortBy('name')" style="cursor:pointer">Nama</th>
                         <th>SKS</th>

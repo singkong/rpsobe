@@ -157,6 +157,15 @@ class MataKuliahIndex extends Component
         $this->showDeleteConfirm = null;
     }
 
+    public function toggleSelectAll(): void
+    {
+        if (count($this->selectedItems) > 0) {
+            $this->selectedItems = [];
+        } else {
+            $this->selectedItems = $this->mataKuliahList()->pluck('id')->toArray();
+        }
+    }
+
     public function bulkDelete(): void
     {
         Gate::authorize('mata-kuliah.delete');

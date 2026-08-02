@@ -19,37 +19,38 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($this->notifications as $notification)
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $this->notifications; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $notification): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                         <tr>
-                            <td><strong>{{ $notification->title }}</strong></td>
-                            <td>{{ $notification->message }}</td>
+                            <td><strong><?php echo e($notification->title); ?></strong></td>
+                            <td><?php echo e($notification->message); ?></td>
                             <td>
-                                @php
+                                <?php
                                     $bg = match($notification->type) {
                                         'rps_submitted' => 'blue', 'rps_reviewed' => 'green',
                                         'rps_revision_requested' => 'orange', 'rps_approved' => 'success',
                                         'rps_published' => 'primary', 'reviewer_assigned' => 'cyan',
                                         'deadline_reminder' => 'red', default => 'secondary',
                                     };
-                                @endphp
-                                <span class="badge bg-{{ $bg }}-lt">{{ str_replace('_', ' ', ucfirst($notification->type)) }}</span>
+                                ?>
+                                <span class="badge bg-<?php echo e($bg); ?>-lt"><?php echo e(str_replace('_', ' ', ucfirst($notification->type))); ?></span>
                             </td>
-                            <td class="text-muted">{{ $notification->created_at->diffForHumans() }}</td>
+                            <td class="text-muted"><?php echo e($notification->created_at->diffForHumans()); ?></td>
                             <td>
-                                @if($notification->read_at)
+                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($notification->read_at): ?>
                                     <span class="badge bg-success-lt">Dibaca</span>
-                                @else
+                                <?php else: ?>
                                     <span class="badge bg-blue-lt">Baru</span>
-                                @endif
+                                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                             </td>
                         </tr>
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                         <tr>
                             <td colspan="5" class="text-center py-5 text-secondary">Tidak ada notifikasi</td>
                         </tr>
-                    @endforelse
+                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+<?php /**PATH E:\laragon\www\rps-obe\resources\views/livewire/notification/notification-list.blade.php ENDPATH**/ ?>
