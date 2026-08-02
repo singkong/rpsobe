@@ -36,7 +36,7 @@ class ProfilLulusan extends Model
 
     public function cpls(): BelongsToMany
     {
-        return $this->belongsToMany(CPL::class, 'profil_lulusan_cpl')
+        return $this->belongsToMany(CPL::class, 'profil_lulusan_cpl', 'profil_lulusan_id', 'cpl_id')
             ->withTimestamps();
     }
 }

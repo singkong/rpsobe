@@ -47,7 +47,7 @@ class CPMK extends Model
 
     public function cpl(): BelongsToMany
     {
-        return $this->belongsToMany(CPL::class, 'cpml_cpl')
+        return $this->belongsToMany(CPL::class, 'cpml_cpl', 'cpml_id', 'cpl_id')
             ->withTimestamps();
     }
 }

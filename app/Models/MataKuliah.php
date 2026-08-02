@@ -49,13 +49,13 @@ class MataKuliah extends Model
 
     public function dosens(): BelongsToMany
     {
-        return $this->belongsToMany(Dosen::class, 'mata_kuliah_dosen')
+        return $this->belongsToMany(Dosen::class, 'mata_kuliah_dosen', 'mata_kuliah_id', 'dosen_id')
             ->withTimestamps();
     }
 
     public function cpls(): BelongsToMany
     {
-        return $this->belongsToMany(CPL::class, 'mata_kuliah_cpl')
+        return $this->belongsToMany(CPL::class, 'mata_kuliah_cpl', 'mata_kuliah_id', 'cpl_id')
             ->withTimestamps();
     }
 

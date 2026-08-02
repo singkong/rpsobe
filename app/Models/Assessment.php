@@ -53,7 +53,7 @@ class Assessment extends Model
 
     public function subCpmk(): BelongsToMany
     {
-        return $this->belongsToMany(SubCPMK::class, 'assessment_sub_cpmk')
+        return $this->belongsToMany(SubCPMK::class, 'assessment_sub_cpmk', 'assessment_id', 'sub_cpmk_id')
             ->withTimestamps();
     }
 }

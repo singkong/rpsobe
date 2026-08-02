@@ -50,13 +50,13 @@ class CPL extends Model
 
     public function profilLulusan(): BelongsToMany
     {
-        return $this->belongsToMany(ProfilLulusan::class, 'profil_lulusan_cpl')
+        return $this->belongsToMany(ProfilLulusan::class, 'profil_lulusan_cpl', 'cpl_id', 'profil_lulusan_id')
             ->withTimestamps();
     }
 
     public function mataKuliah(): BelongsToMany
     {
-        return $this->belongsToMany(MataKuliah::class, 'mata_kuliah_cpl')
+        return $this->belongsToMany(MataKuliah::class, 'mata_kuliah_cpl', 'cpl_id', 'mata_kuliah_id')
             ->withTimestamps();
     }
 

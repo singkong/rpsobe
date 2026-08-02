@@ -75,7 +75,7 @@ class RPS extends Model
 
     public function cpl(): BelongsToMany
     {
-        return $this->belongsToMany(CPL::class, 'rps_cpl')
+        return $this->belongsToMany(CPL::class, 'rps_cpl', 'rps_id', 'cpl_id')
             ->withTimestamps();
     }
 
