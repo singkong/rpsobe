@@ -53,12 +53,12 @@ Platform ini dirancang untuk menjawab kebutuhan perguruan tinggi dalam beradapta
 |-------|-------|
 | **Autentikasi** | Login, Register via invitation, Forgot password, Email verification, RBAC Spatie Permission (9 role, 40+ permission) |
 | **Master Data** | CRUD Universitas, Fakultas, Program Studi, Kurikulum, Semester, Mata Kuliah, Dosen, Profil Lulusan, CPL, Referensi |
-| **RPS Builder** | Wizard 8 langkah: Info MK → Pilih CPL → CPMK → Sub-CPMK → Materi → Metode → Assessment → Review |
-| **Mapping** | CPL → CPMK → Sub-CPMK → Assessment (Constructive Alignment) |
+| **RPS Builder** | Wizard 8 langkah: Info MK -> Pilih CPL -> CPMK -> Sub-CPMK -> Materi -> Metode -> Assessment -> Review |
+| **Mapping** | CPL -> CPMK -> Sub-CPMK -> Assessment (Constructive Alignment) |
 | **AI Assistant** | Generate CPMK, Sub-CPMK, materi, assessment, rubrik, referensi, learning outcome, aktivitas pembelajaran |
 | **AI Validator** | Periksa 8 aspek: Taksonomi Bloom, Alignment, Jumlah CPMK, Pertemuan, Assessment, Bobot, Referensi, Konsistensi |
 | **AI Reviewer** | Skor otomatis, komentar per komponen, saran perbaikan spesifik |
-| **Workflow** | Draft → Review → Revision → Approved → Published → Archived + reviewer assignment + history |
+| **Workflow** | Draft -> Review -> Revision -> Approved -> Published -> Archived + reviewer assignment + history |
 | **Dashboard** | 6 dashboard per role: Dosen, Kaprodi, Fakultas, Universitas, LPM, Super Admin |
 | **Reporting** | Statistik, grafik, filter, export Excel & PDF, laporan akreditasi |
 | **Export** | RPS ke Word (.docx) via PHPWord dan PDF via DomPDF, template kustom per universitas |
@@ -89,19 +89,19 @@ Platform ini dirancang untuk menjawab kebutuhan perguruan tinggi dalam beradapta
 ## Arsitektur
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                    PRESENTATION LAYER                    │
-│  Tabler UI  ←→  Livewire 3 / Volt  ←→  Blade Views     │
-├─────────────────────────────────────────────────────────┤
-│                   APPLICATION LAYER                      │
-│  Controllers  ←→  Services  ←→  Actions  ←→  Jobs      │
-├─────────────────────────────────────────────────────────┤
-│                     DOMAIN LAYER                         │
-│  Models  ←→  Enums  ←→  DTOs  ←→  Events & Listeners   │
-├─────────────────────────────────────────────────────────┤
-│                  INFRASTRUCTURE LAYER                    │
-│  MariaDB  ←→  Redis  ←→  Queue  ←→  Storage  ←→  AI    │
-└─────────────────────────────────────────────────────────┘
++---------------------------------------------------------+
+|                    PRESENTATION LAYER                    |
+|  Tabler UI  <->  Livewire 3 / Volt  <->  Blade Views     |
++---------------------------------------------------------+
+|                   APPLICATION LAYER                      |
+|  Controllers  <->  Services  <->  Actions  <->  Jobs      |
++---------------------------------------------------------+
+|                     DOMAIN LAYER                         |
+|  Models  <->  Enums  <->  DTOs  <->  Events & Listeners   |
++---------------------------------------------------------+
+|                  INFRASTRUCTURE LAYER                    |
+|  MariaDB  <->  Redis  <->  Queue  <->  Storage  <->  AI    |
++---------------------------------------------------------+
 ```
 
 ---
