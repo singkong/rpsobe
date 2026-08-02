@@ -16,6 +16,10 @@ mount(function () use (&$redirectRoute) {
     };
 });
 
+$userName = Auth::user()->name;
+$userRole = Auth::user()->roles->first()->name ?? 'Pengguna';
+$userInitial = substr($userName, 0, 1);
+$tenantName = Auth::user()->tenant?->name;
 ?>
 
 <div>
@@ -27,16 +31,17 @@ mount(function () use (&$redirectRoute) {
                 </div>
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-4">
-                        <span class="avatar avatar-xl me-3">{{ substr(auth()->user()->name, 0, 1) }}</span>
+                        <span class="avatar avatar-xl me-3"><?= $userInitial ?></span>
                         <div>
-                            <h2 class="mb-0">Selamat Datang, {{ auth()->user()->name }}</h2>
+                            <h2 class="mb-0">Selamat Datang, <?= $userName ?></h2>
                             <p class="text-secondary mb-0">
-                                {{ auth()->user()->roles->first()->name ?? 'Pengguna' }}
+                                <?= $userRole ?>
+                                <?php if ($tenantName): ?> - <?= $tenantName ?><?php endif; ?>
                             </p>
                         </div>
                     </div>
                     <p>Sistem RPS OBE membantu Anda menyusun, mereview, dan mengelola RPS berbasis OBE.</p>
-                    <a href="{{ route($redirectRoute) }}" class="btn btn-primary">Ke Dashboard Saya</a>
+                    <a href="<?= route($redirectRoute) ?>" class="btn btn-primary">Ke Dashboard Saya</a>
                 </div>
             </div>
         </div>

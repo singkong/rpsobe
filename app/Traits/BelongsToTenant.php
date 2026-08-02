@@ -17,7 +17,7 @@ trait BelongsToTenant
         });
 
         static::addGlobalScope('tenant', function (Builder $query) {
-            if (auth()->check() && !auth()->user()->isSuperAdmin()) {
+            if (auth()->hasUser() && !auth()->user()->isSuperAdmin() && auth()->user()->tenant_id) {
                 $query->where($query->getModel()->getTable() . '.tenant_id', auth()->user()->tenant_id);
             }
         });
