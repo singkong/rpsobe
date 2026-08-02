@@ -25,7 +25,7 @@
                     <span class="ms-2">RPS OBE</span>
                 </h1>
                 <div class="navbar-nav flex-row order-md-last">
-                    <livewire:notification.notification-center />
+                    @livewire('notification.notification-center')
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
                             <span class="avatar avatar-sm" style="background-image: url({{ auth()->user()->avatar ? asset(auth()->user()->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->name) . '&background=206bc4&color=fff&size=32' }})"></span>

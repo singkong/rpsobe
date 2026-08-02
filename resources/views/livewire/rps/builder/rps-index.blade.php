@@ -1,4 +1,4 @@
-<x-layouts.app title="Daftar RPS">
+<div>
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Daftar RPS</h3>
@@ -148,4 +148,4 @@
             </div>
         </div>
     @endif
-</x-layouts.app>
+</div>

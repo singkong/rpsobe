@@ -104,4 +104,244 @@ $resetFilters = function () {
     $this->filterDateTo = '';
 };
 
-return view('livewire.audit.audit-viewer');
+?>
+
+<div>
+    <div class="page-header d-print-none">
+        <div class="container-xl">
+            <div class="row g-2 align-items-center">
+                <div class="col">
+                    <h2 class="page-title">Audit Log</h2>
+                    <div class="text-secondary">
+                        <span>Catatan aktivitas sistem</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-body">
+        <div class="container-xl">
+            <div class="card">
+                <div class="card-body border-bottom py-3">
+                    <div class="row g-2">
+                        <div class="col-md-4">
+                            <div class="input-icon">
+                                <input type="text" wire:model.live="search" class="form-control" placeholder="Cari user, aksi, atau IP...">
+                                <span class="input-icon-addon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="7"/><path d="M21 21l-6-6"/></svg>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <select wire:model.live="filterAction" class="form-select">
+                                @foreach($this->actionOptions() as $value => $label)
+                                    <option value="{{ $value }}">{{ $label }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="date" wire:model.live="filterDateFrom" class="form-control" placeholder="Dari Tanggal">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="date" wire:model.live="filterDateTo" class="form-control" placeholder="Sampai Tanggal">
+                        </div>
+                        <div class="col-md-2">
+                            <button wire:click="resetFilters" class="btn btn-ghost-secondary w-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9 -9a9 9 0 0 0 -9 9"/><path d="M3 21v-4h4"/></svg>
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                @php $list = $this->auditList(); @endphp
+                <div class="table-responsive">
+                    <table class="table table-vcenter card-table table-striped">
+                        <thead>
+                            <tr>
+                                <th wire:click="sortBy('created_at')" style="cursor:pointer">
+                                    Waktu
+                                    @if($sortField === 'created_at')
+                                        <small>{{ $sortDirection === 'asc' ? '&#9650;' : '&#9660;' }}</small>
+                                    @endif
+                                </th>
+                                <th>User</th>
+                                <th>Aksi</th>
+                                <th>Model</th>
+                                <th>Deskripsi</th>
+                                <th>IP Address</th>
+                                <th class="w-1">Detail</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($list as $audit)
+                                <tr>
+                                    <td>
+                                        <small class="text-nowrap">{{ $audit->created_at->format('d M Y H:i:s') }}</small>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <span class="avatar avatar-xs me-2" style="background-image: url({{ $audit->user ? ($audit->user->avatar ? asset($audit->user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($audit->user->name) . '&background=206bc4&color=fff&size=32') : '' }})"></span>
+                                            <span>{{ $audit->user->name ?? 'System' }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ match($audit->action) {
+                                            'RPSSubmitted' => 'blue',
+                                            'RPSReviewed' => 'green',
+                                            'RPSRevisionRequested' => 'orange',
+                                            'RPSApproved' => 'success',
+                                            'RPSPublished' => 'primary',
+                                            'RPSArchived' => 'secondary',
+                                            'ReviewerAssigned' => 'cyan',
+                                            default => 'secondary',
+                                        } }-lt">
+                                            {{ match($audit->action) {
+                                                'RPSSubmitted' => 'RPS Diajukan',
+                                                'RPSReviewed' => 'RPS Direview',
+                                                'RPSRevisionRequested' => 'Revisi Diminta',
+                                                'RPSApproved' => 'RPS Disetujui',
+                                                'RPSPublished' => 'RPS Dipublikasi',
+                                                'RPSArchived' => 'RPS Diarsipkan',
+                                                'ReviewerAssigned' => 'Reviewer Ditugaskan',
+                                                default => $audit->action,
+                                            } }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <small class="fw-bold">{{ class_basename($audit->model_type) }}</small>
+                                            <small class="text-secondary">ID: {{ $audit->model_id }}</small>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <small class="text-secondary">
+                                            @if($audit->new_values)
+                                                @if(isset($audit->new_values['status']))
+                                                    Status: {{ $audit->new_values['status'] }}
+                                                @else
+                                                    {{ \Illuminate\Support\Str::limit(json_encode($audit->new_values), 60) }}
+                                                @endif
+                                            @else
+                                                -
+                                            @endif
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <small class="text-secondary">{{ $audit->ip_address ?? '-' }}</small>
+                                    </td>
+                                    <td>
+                                        <button wire:click="viewDetail({{ $audit->id }})" class="btn btn-sm btn-ghost-secondary" title="Detail">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/></svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="7">
+                                        <div class="empty py-4">
+                                            <div class="empty-icon">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M10 3h4a1 1 0 0 1 1 1v3h-6v-3a1 1 0 0 1 1 -1z"/><path d="M5 6h14a2 2 0 0 1 2 2v11a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2z"/></svg>
+                                            </div>
+                                            <p class="empty-title">Tidak ada audit log</p>
+                                            <p class="empty-subtitle text-secondary">Catatan aktivitas sistem akan muncul di sini.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer d-flex align-items-center">
+                    <p class="m-0 text-secondary">Menampilkan {{ $list->firstItem() }} - {{ $list->lastItem() }} dari {{ $list->total() }}</p>
+                    <div class="ms-auto">{{ $list->links() }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if($showDetail && $selectedAudit)
+        <div class="modal modal-blur fade show" tabindex="-1" style="display:block" role="dialog">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Detail Audit Log #{{ $selectedAudit->id }}</h5>
+                        <button type="button" class="btn-close" wire:click="closeDetail" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <strong>Waktu:</strong>
+                            <span>{{ $selectedAudit->created_at->format('d M Y, H:i:s') }}</span>
+                        </div>
+                        <div class="mb-3">
+                            <strong>User:</strong>
+                            <span>{{ $selectedAudit->user->name ?? 'System' }} ({{ $selectedAudit->user->email ?? '-' }})</span>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Aksi:</strong>
+                            <span class="badge bg-blue-lt">{{ $selectedAudit->action }}</span>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Model:</strong>
+                            <span>{{ $selectedAudit->model_type }} #{{ $selectedAudit->model_id }}</span>
+                        </div>
+                        <div class="mb-3">
+                            <strong>IP Address:</strong>
+                            <span>{{ $selectedAudit->ip_address ?? '-' }}</span>
+                        </div>
+                        <div class="mb-3">
+                            <strong>User Agent:</strong>
+                            <small class="text-secondary d-block">{{ $selectedAudit->user_agent ?? '-' }}</small>
+                        </div>
+
+                        @if($selectedAudit->old_values || $selectedAudit->new_values)
+                            <hr>
+                            <h6>Perubahan Data</h6>
+                            <div class="row g-3">
+                                @if($selectedAudit->old_values)
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-header bg-red-lt">
+                                                <strong>Data Sebelumnya</strong>
+                                            </div>
+                                            <div class="card-body">
+                                                <pre class="m-0" style="font-size: 12px;">{{ json_encode($selectedAudit->old_values, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                                @if($selectedAudit->new_values)
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-header bg-green-lt">
+                                                <strong>Data Baru</strong>
+                                            </div>
+                                            <div class="card-body">
+                                                <pre class="m-0" style="font-size: 12px;">{{ json_encode($selectedAudit->new_values, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        @endif
+
+                        @if($selectedAudit->changes)
+                            <hr>
+                            <h6>Field yang Berubah</h6>
+                            <div class="card">
+                                <div class="card-body">
+                                    <pre class="m-0" style="font-size: 12px;">{{ json_encode($selectedAudit->changes, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-ghost-secondary" wire:click="closeDetail">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop fade show"></div>
+    @endif
+</div>
+

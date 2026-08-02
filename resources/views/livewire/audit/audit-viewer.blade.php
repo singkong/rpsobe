@@ -1,4 +1,4 @@
-<x-layouts.app title="Audit Log">
+<div>
     <div class="page-header d-print-none">
         <div class="container-xl">
             <div class="row g-2 align-items-center">
@@ -235,4 +235,4 @@
         </div>
         <div class="modal-backdrop fade show"></div>
     @endif
-</x-layouts.app>
+</div>

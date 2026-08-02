@@ -1,4 +1,4 @@
-<x-layouts.app title="RPS Wizard">
+<div>
     <div class="page-header d-print-none">
         <div class="row align-items-center">
             <div class="col">
@@ -119,4 +119,4 @@
             </div>
         </div>
     </div>
-</x-layouts.app>
+</div>

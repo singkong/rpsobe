@@ -1,4 +1,4 @@
-<x-layouts.app title="Riwayat Workflow">
+<div>
     <div class="page-header d-print-none">
         <div class="container-xl">
             <div class="row g-2 align-items-center">
@@ -195,4 +195,4 @@
             </div>
         </div>
     </div>
-</x-layouts.app>
+</div>

@@ -22,7 +22,7 @@
                 <p class="text-secondary">Rencana Pembelajaran Semester Outcome-Based Education</p>
             </div>
 
-            <livewire:auth.login />
+            @livewire('auth.login')
         </div>
     </div>
 </body>

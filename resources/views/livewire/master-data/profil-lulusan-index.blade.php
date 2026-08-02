@@ -1,4 +1,4 @@
-<x-layouts.app title="Data Profil Lulusan">
+<div>
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Data Profil Lulusan</h3>
@@ -155,4 +155,4 @@
             </div>
         </div>
     @endif
-</x-layouts.app>
+</div>

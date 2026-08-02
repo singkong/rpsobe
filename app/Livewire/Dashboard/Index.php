@@ -1,26 +1,44 @@
 <?php
 
-use function Livewire\Volt\{state, mount};
+use function Livewire\Volt\{mount};
 use Illuminate\Support\Facades\Auth;
 
-mount(function () {
-    $user = Auth::user();
+$redirectRoute = 'dashboard.dosen';
 
-    if ($user->hasRole('super-admin')) {
-        $this->redirect(route('dashboard.admin'), navigate: true);
-    } elseif ($user->hasRole('admin-univ')) {
-        $this->redirect(route('dashboard.universitas'), navigate: true);
-    } elseif ($user->hasRole('admin-fakultas')) {
-        $this->redirect(route('dashboard.fakultas'), navigate: true);
-    } elseif ($user->hasRole('kaprodi')) {
-        $this->redirect(route('dashboard.kaprodi'), navigate: true);
-    } elseif ($user->hasRole('dosen')) {
-        $this->redirect(route('dashboard.dosen'), navigate: true);
-    } elseif ($user->hasRole('reviewer') || $user->hasRole('lpm') || $user->hasRole('mahasiswa')) {
-        $this->redirect(route('dashboard.dosen'), navigate: true);
-    } else {
-        $this->redirect(route('dashboard.dosen'), navigate: true);
-    }
+mount(function () use (&$redirectRoute) {
+    $user = Auth::user();
+    $redirectRoute = match (true) {
+        $user->hasRole('super-admin') => 'dashboard.admin',
+        $user->hasRole('admin-univ') => 'dashboard.universitas',
+        $user->hasRole('admin-fakultas') => 'dashboard.fakultas',
+        $user->hasRole('kaprodi') => 'dashboard.kaprodi',
+        default => 'dashboard.dosen',
+    };
 });
 
-return view('livewire.dashboard.index');
+?>
+
+<div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Dashboard</h3>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-4">
+                        <span class="avatar avatar-xl me-3">{{ substr(auth()->user()->name, 0, 1) }}</span>
+                        <div>
+                            <h2 class="mb-0">Selamat Datang, {{ auth()->user()->name }}</h2>
+                            <p class="text-secondary mb-0">
+                                {{ auth()->user()->roles->first()->name ?? 'Pengguna' }}
+                            </p>
+                        </div>
+                    </div>
+                    <p>Sistem RPS OBE membantu Anda menyusun, mereview, dan mengelola RPS berbasis OBE.</p>
+                    <a href="{{ route($redirectRoute) }}" class="btn btn-primary">Ke Dashboard Saya</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

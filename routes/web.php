@@ -8,6 +8,8 @@ use App\Http\Controllers\ReportExportController;
 
 Route::get('/', fn () => redirect()->route('dashboard'));
 
+Route::get('/ping', fn () => 'OK');
+
 // --- Guest Routes ---
 Route::middleware('guest')->group(function () {
     Route::view('/login', 'auth.login-page')->name('login');

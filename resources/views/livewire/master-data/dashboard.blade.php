@@ -1,4 +1,4 @@
-<x-layouts.app title="Dashboard Master Data">
+<div>
     <div class="page-header mb-3">
         <div class="row align-items-center">
             <div class="col">
@@ -94,4 +94,4 @@
             @endif
         @endforeach
     </div>
-</x-layouts.app>
+</div>

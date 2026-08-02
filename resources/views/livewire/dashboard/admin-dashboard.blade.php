@@ -1,4 +1,4 @@
-<x-layouts.app title="Dashboard Admin">
+<div>
     <div class="page-header mb-3">
         <div class="row align-items-center">
             <div class="col">
@@ -173,4 +173,4 @@
             </div>
         </div>
     @endif
-</x-layouts.app>
+</div>
