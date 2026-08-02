@@ -12,7 +12,7 @@
                 </div>
             @endif
 
-            @if ($errors->any())
+            @if (!empty($errors) && $errors->any())
                 <div class="alert alert-danger alert-dismissible" role="alert">
                     <div class="d-flex">
                         <div>

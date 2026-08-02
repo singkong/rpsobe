@@ -132,4 +132,124 @@ $getStepStatus = function ($step) {
     return 'pending';
 };
 
-return view('livewire.rps.builder.wizard');
+?>
+
+<div>
+    <div class="page-header d-print-none">
+        <div class="row align-items-center">
+            <div class="col">
+                <h2 class="page-title">
+                    <?= $isCreating ? 'Buat RPS Baru' : 'Edit RPS' ?>
+                </h2>
+                <?php if($rps && $rps->exists): ?>
+                    <div class="text-secondary mt-1">
+                        <?= $rps->mataKuliah->name ?? '-' ?> - <?= $rps->semester->name ?? '-' ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+            <div class="col-auto ms-auto d-flex gap-2">
+                <button wire:click="saveDraft" class="btn btn-outline-primary" wire:loading.attr="disabled">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke="none" d="M0 0h24v24H0z"/><path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2"/><path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M14 4l0 4h-6l0 -4"/></svg>
+                    Simpan Draft
+                </button>
+                <div class="d-flex align-items-center">
+                    <div class="progress" style="width: 150px; height: 8px;">
+                        <div class="progress-bar bg-primary" style="width: <?= $completionPercentage ?>%" role="progressbar"></div>
+                    </div>
+                    <span class="ms-2 text-secondary small"><?= $completionPercentage ?>%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-3">
+        <div class="card-body">
+            <div class="steps steps-counter steps-primary mb-4">
+                <?php for($i = 1; $i <= 8; $i++): ?>
+                    <?php
+                        $status = $this->getStepStatus($i);
+                        $label = $this->getStepLabel($i);
+                    ?>
+                    <a href="#"
+                       wire:click.prevent="goToStep(<?= $i ?>)"
+                       class="step-item <?= $status === 'current' ? 'active' : '' ?>"
+                       style="<?php if($status === 'completed'): ?>color: var(--tblr-primary); cursor: pointer;<?php elseif($status === 'pending'): ?>pointer-events: none; opacity: 0.5;<?php endif; ?> text-decoration: none;">
+                        <div class="step-marker">
+                            <?php if($status === 'completed'): ?>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke="none" d="M0 0h24v24H0z"/><path d="M5 12l5 5l10 -10"/></svg>
+                            <?php else: ?>
+                                <?= $i ?>
+                            <?php endif; ?>
+                        </div>
+                        <span class="step-label"><?= $label ?></span>
+                    </a>
+                <?php endfor; ?>
+            </div>
+
+            <?php if(session()->has('message')): ?>
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <?= session('message') ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
+
+            <?php if(session()->has('step_errors')): ?>
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <ul class="mb-0">
+                        <?php foreach(session('step_errors') as $error): ?>
+                            <li><?= $error ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
+
+            <div class="hr-text hr-text-center hr-text-spaceless mt-3 mb-4">
+                <span class="badge bg-primary-lt">Step <?= $currentStep ?> / 8</span>
+            </div>
+
+            <div class="step-content">
+                <?php if($currentStep >= 1 && $rps): ?>
+                    <?= \Livewire\Livewire::mount('rps.builder.step1-informasi-mk', ['rpsId' => $rps->id ?? null])->html() ?>
+                <?php endif; ?>
+                <?php if($currentStep >= 2 && $rps && $rps->exists): ?>
+                    <?= \Livewire\Livewire::mount('rps.builder.step2-pilih-cpl', ['rpsId' => $rps->id])->html() ?>
+                <?php endif; ?>
+                <?php if($currentStep >= 3 && $rps && $rps->exists): ?>
+                    <?= \Livewire\Livewire::mount('rps.builder.step3-cpmk', ['rpsId' => $rps->id])->html() ?>
+                <?php endif; ?>
+                <?php if($currentStep >= 4 && $rps && $rps->exists): ?>
+                    <?= \Livewire\Livewire::mount('rps.builder.step4-sub-cpmk', ['rpsId' => $rps->id])->html() ?>
+                <?php endif; ?>
+                <?php if($currentStep >= 5 && $rps && $rps->exists): ?>
+                    <?= \Livewire\Livewire::mount('rps.builder.step5-materi', ['rpsId' => $rps->id])->html() ?>
+                <?php endif; ?>
+                <?php if($currentStep >= 6 && $rps && $rps->exists): ?>
+                    <?= \Livewire\Livewire::mount('rps.builder.step6-metode', ['rpsId' => $rps->id])->html() ?>
+                <?php endif; ?>
+                <?php if($currentStep >= 7 && $rps && $rps->exists): ?>
+                    <?= \Livewire\Livewire::mount('rps.builder.step7-assessment', ['rpsId' => $rps->id])->html() ?>
+                <?php endif; ?>
+                <?php if($currentStep >= 8 && $rps && $rps->exists): ?>
+                    <?= \Livewire\Livewire::mount('rps.builder.step8-review', ['rpsId' => $rps->id])->html() ?>
+                <?php endif; ?>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                <button wire:click="prevStep" class="btn btn-outline-secondary" <?php if($currentStep <= 1): ?>disabled<?php endif; ?>>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke="none" d="M0 0h24v24H0z"/><path d="M15 6l-6 6l6 6"/></svg>
+                    Sebelumnya
+                </button>
+
+                <?php if($currentStep < 8): ?>
+                    <button wire:click="nextStep" class="btn btn-primary">
+                        Selanjutnya
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke="none" d="M0 0h24v24H0z"/><path d="M9 6l6 6l-6 6"/></svg>
+                    </button>
+                <?php else: ?>
+                    <span></span>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>

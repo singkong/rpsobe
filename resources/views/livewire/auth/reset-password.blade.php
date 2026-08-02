@@ -1,4 +1,4 @@
-<x-layouts.auth title="Reset Password">
+<div>
     <div class="card card-md">
         <div class="card-body">
             <h2 class="card-title text-center mb-4">Reset Password</h2>
@@ -18,7 +18,7 @@
                 </div>
             @endif
 
-            @if ($errors->any())
+            @if (!empty($errors) && $errors->any())
                 <div class="alert alert-danger alert-dismissible" role="alert">
                     <div class="d-flex">
                         <div>
@@ -73,4 +73,4 @@
             </form>
         </div>
     </div>
-</x-layouts.auth>
+</div>

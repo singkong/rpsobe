@@ -1,4 +1,4 @@
-<x-layouts.auth title="Lupa Password">
+<div>
     <div class="card card-md">
         <div class="card-body">
             <h2 class="card-title text-center mb-4">Lupa Password</h2>
@@ -18,7 +18,7 @@
                 </div>
             @endif
 
-            @if ($errors->any())
+            @if (!empty($errors) && $errors->any())
                 <div class="alert alert-danger alert-dismissible" role="alert">
                     <div class="d-flex">
                         <div>
@@ -61,4 +61,4 @@
             <a href="{{ route('login') }}" wire:navigate>Kembali ke halaman login</a>
         </div>
     </div>
-</x-layouts.auth>
+</div>

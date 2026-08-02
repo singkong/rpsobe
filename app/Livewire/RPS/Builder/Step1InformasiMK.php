@@ -128,4 +128,95 @@ $save = function () {
     $this->dispatch('rps-saved', rpsId: $this->rps->id);
 };
 
-return view('livewire.rps.builder.step1-informasi-mk');
+?>
+
+<div>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Informasi Mata Kuliah</h3>
+            <?php if($rps && $rps->exists): ?>
+                <span class="badge bg-green-lt ms-auto"><?= $rps->mataKuliah->name ?? 'Belum dipilih' ?></span>
+            
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label required">Kurikulum</label>
+                    <select wire:model.live="kurikulum_id" class="form-select is-invalid">
+                        <option value="">-- Pilih Kurikulum --</option>
+                        <?php foreach($kurikulumList as $k): ?>
+                            <option value="<?= $k->id ?>"><?= $k->name ?> (<?= $k->programStudi->name ?? '' ?>)</option>
+                        <?php endforeach; ?>
+                    </select>
+                    <div class="invalid-feedback"><?= (isset(`$errors) ? `$errors->first('kurikulum_id') ?></div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label required">Mata Kuliah</label>
+                    <select wire:model.live="mata_kuliah_id" class="form-select is-invalid" <?= !$kurikulum_id ? 'disabled' : '' ?>>
+                        <option value="">-- Pilih Mata Kuliah --</option>
+                        <?php foreach($mataKuliahList as $mk): ?>
+                            <option value="<?= $mk->id ?>"><?= $mk->code ?> - <?= $mk->name ?> (<?= $mk->sks ?> SKS)</option>
+                        <?php endforeach; ?>
+                    </select>
+                    <div class="invalid-feedback"><?= (isset(`$errors) ? `$errors->first('mata_kuliah_id') ?></div>
+                </div>
+            </div>
+
+            <?php if($selectedMK): ?>
+                <div class="card card-sm bg-primary-lt mb-3">
+                    <div class="card-body">
+                        <div class="d-flex gap-3">
+                            <div><strong>Kode:</strong> <?= $selectedMK->code ?></div>
+                            <div><strong><?= $selectedMK->name ?></strong></div>
+                            <div><strong>SKS:</strong> <?= $selectedMK->sks ?></div>
+                            <div><strong>Semester:</strong> <?= $selectedMK->semester ?></div>
+                            <div><strong>Jenis:</strong> <?= ucfirst($selectedMK->jenis) ?></div>
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label required">Semester</label>
+                    <select wire:model="semester_id" class="form-select is-invalid">
+                        <option value="">-- Pilih Semester --</option>
+                        <?php foreach($semesterList as $s): ?>
+                            <option value="<?= $s->id ?>"><?= $s->name ?> (<?= $s->tahun_akademik ?>)</option>
+                        <?php endforeach; ?>
+                    </select>
+                    <div class="invalid-feedback"><?= (isset(`$errors) ? `$errors->first('semester_id') ?></div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Dosen Pengampu</label>
+                <div class="row">
+                    <?php foreach($dosenList as $dosen): ?>
+                        <div class="col-md-4 mb-2">
+                            <label class="form-check">
+                                <input type="checkbox" class="form-check-input"
+                                       wire:change="toggleDosen(<?= $dosen->id ?>)"
+                                       <?= in_array($dosen->id, $dosen_pengampu) ? 'checked' : '' ?>>
+                                <span class="form-check-label"><?= $dosen->name ?><?= $dosen->nidn ? ' (NIDN: ' . $dosen->nidn . ')' : '' ?></span>
+                            </label>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label required">Deskripsi Mata Kuliah</label>
+                <textarea wire:model="deskripsi" class="form-control" rows="4" placeholder="Deskripsi singkat mata kuliah..."></textarea>
+                <div class="invalid-feedback"><?= (isset(`$errors) ? `$errors->first('deskripsi') ?></div>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button wire:click="save" class="btn btn-primary" wire:loading.attr="disabled">
+                    <span wire:loading.remove wire:target="save">Simpan & Lanjutkan</span>
+                    <span wire:loading wire:target="save">Menyimpan...</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
