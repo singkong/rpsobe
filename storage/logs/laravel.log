@@ -1864,3 +1864,11 @@
 #82 E:/laragon/www/rps-obe/public/index.php(19): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
 #83 {main}
 "} 
+[2026-08-02 19:53:42] local.ERROR: Namespace declaration statement has to be the very first statement or after any declare call in the script {"userId":2,"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Namespace declaration statement has to be the very first statement or after any declare call in the script at E:/laragon/www/rps-obe/app/Livewire/notification/NotificationCenter.php:3)
+[stacktrace]
+#0 {main}
+"} 
+[2026-08-02 19:53:54] local.ERROR: Namespace declaration statement has to be the very first statement or after any declare call in the script {"userId":2,"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Namespace declaration statement has to be the very first statement or after any declare call in the script at E:/laragon/www/rps-obe/app/Livewire/notification/NotificationCenter.php:3)
+[stacktrace]
+#0 {main}
+"} 
