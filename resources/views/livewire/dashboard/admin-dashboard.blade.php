@@ -12,17 +12,16 @@
         </div>
     </div>
 
-    @if(!$stats)
+    @if (!$this->stats())
         <div class="empty">
             <p class="empty-title">Data tidak tersedia</p>
         </div>
     @else
-        {{-- Top Stats Cards --}}
         <div class="row mb-3">
             <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2">
                 <div class="card">
                     <div class="card-body p-3 text-center">
-                        <div class="h1 m-0">{{ $stats['totalTenants'] }}</div>
+                        <div class="h1 m-0">{{ $this->stats()['totalTenants'] }}</div>
                         <div class="text-secondary">Total Tenants</div>
                     </div>
                 </div>
@@ -31,7 +30,7 @@
                 <div class="card">
                     <div class="card-status-top bg-green"></div>
                     <div class="card-body p-3 text-center">
-                        <div class="h1 m-0">{{ $stats['activeTenants'] }}</div>
+                        <div class="h1 m-0">{{ $this->stats()['activeTenants'] }}</div>
                         <div class="text-secondary">Active Tenants</div>
                     </div>
                 </div>
@@ -40,7 +39,7 @@
                 <div class="card">
                     <div class="card-status-top bg-red"></div>
                     <div class="card-body p-3 text-center">
-                        <div class="h1 m-0">{{ $stats['inactiveTenants'] }}</div>
+                        <div class="h1 m-0">{{ $this->stats()['inactiveTenants'] }}</div>
                         <div class="text-secondary">Inactive Tenants</div>
                     </div>
                 </div>
@@ -48,7 +47,7 @@
             <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2">
                 <div class="card">
                     <div class="card-body p-3 text-center">
-                        <div class="h1 m-0">{{ $stats['totalUsers'] }}</div>
+                        <div class="h1 m-0">{{ $this->stats()['totalUsers'] }}</div>
                         <div class="text-secondary">Total Users</div>
                     </div>
                 </div>
@@ -56,7 +55,7 @@
             <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2">
                 <div class="card">
                     <div class="card-body p-3 text-center">
-                        <div class="h1 m-0">{{ $stats['totalRps'] }}</div>
+                        <div class="h1 m-0">{{ $this->stats()['totalRps'] }}</div>
                         <div class="text-secondary">Total RPS</div>
                     </div>
                 </div>
@@ -64,14 +63,13 @@
             <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2">
                 <div class="card">
                     <div class="card-body p-3 text-center">
-                        <div class="h1 m-0">{{ $stats['totalPublished'] }}</div>
+                        <div class="h1 m-0">{{ $this->stats()['totalPublished'] }}</div>
                         <div class="text-secondary">Published RPS</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- System Health --}}
         <div class="row mb-3">
             <div class="col-md-4">
                 <div class="card">
@@ -83,11 +81,11 @@
                         </div>
                         <div class="d-flex align-items-center mb-2">
                             <small class="text-secondary flex-grow-1">Active Tenants</small>
-                            <span class="badge bg-green-lt">{{ $stats['activeTenants'] }}/{{ $stats['totalTenants'] }}</span>
+                            <span class="badge bg-green-lt">{{ $this->stats()['activeTenants'] }}/{{ $this->stats()['totalTenants'] }}</span>
                         </div>
                         <div class="d-flex align-items-center">
                             <small class="text-secondary flex-grow-1">Total Users</small>
-                            <span class="fw-bold">{{ $stats['totalUsers'] }}</span>
+                            <span class="fw-bold">{{ $this->stats()['totalUsers'] }}</span>
                         </div>
                     </div>
                 </div>
@@ -101,11 +99,11 @@
                         </div>
                         <div class="d-flex align-items-center mb-2">
                             <small class="text-secondary flex-grow-1">Total RPS</small>
-                            <span class="fw-bold">{{ $stats['totalRps'] }}</span>
+                            <span class="fw-bold">{{ $this->stats()['totalRps'] }}</span>
                         </div>
                         <div class="d-flex align-items-center">
                             <small class="text-secondary flex-grow-1">Published</small>
-                            <span class="fw-bold">{{ $stats['totalPublished'] }}</span>
+                            <span class="fw-bold">{{ $this->stats()['totalPublished'] }}</span>
                         </div>
                     </div>
                 </div>
@@ -126,7 +124,6 @@
             </div>
         </div>
 
-        {{-- Recent Tenant Activity --}}
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Aktivitas Tenant Terbaru</h3>
@@ -147,7 +144,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($this->recentTenants as $tenant)
+                            @foreach ($this->recentTenants() as $tenant)
                                 <tr>
                                     <td class="fw-bold">{{ $tenant['name'] }}</td>
                                     <td class="text-secondary">{{ $tenant['code'] }}</td>
@@ -162,11 +159,12 @@
                                     <td>{{ $tenant['rps_count'] }}</td>
                                     <td class="text-secondary small">{{ \Carbon\Carbon::parse($tenant['updated_at'])->diffForHumans() }}</td>
                                 </tr>
-                            @empty
+                            @endforeach
+                            @if (empty($this->recentTenants()))
                                 <tr>
                                     <td colspan="8" class="text-center text-secondary py-4">Belum ada data tenant</td>
                                 </tr>
-                            @endforelse
+                            @endif
                         </tbody>
                     </table>
                 </div>

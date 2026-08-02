@@ -12,14 +12,12 @@
                             <h2 class="mb-0">Selamat Datang, {{ auth()->user()->name }}</h2>
                             <p class="text-secondary mb-0">
                                 {{ auth()->user()->roles->first()->name ?? 'Pengguna' }}
-                                @if(auth()->user()->tenant)
-                                    - {{ auth()->user()->tenant->name }}
-                                @endif
+                                @if (auth()->user()->tenant?->name) - {{ auth()->user()->tenant->name }} @endif
                             </p>
                         </div>
                     </div>
                     <p>Sistem RPS OBE membantu Anda menyusun, mereview, dan mengelola RPS berbasis OBE.</p>
-                    <a href="{{ route($redirectRoute) }}" class="btn btn-primary">Ke Dashboard Saya</a>
+                    <p class="text-secondary">Mengarahkan ke dashboard yang sesuai...</p>
                 </div>
             </div>
         </div>

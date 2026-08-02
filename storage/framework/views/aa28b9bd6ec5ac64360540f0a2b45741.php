@@ -5,13 +5,13 @@
                 <h2 class="page-title">Dashboard Dosen</h2>
                 <div class="text-secondary">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="<?php echo e(route('dashboard')); ?>">Dashboard</a></li>
                         <li class="breadcrumb-item active">Dosen</li>
                     </ol>
                 </div>
             </div>
             <div class="col-auto">
-                <a href="{{ route('rps.create') }}" class="btn btn-primary">
+                <a href="<?php echo e(route('rps.create')); ?>" class="btn btn-primary">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14"/><path d="M5 12l14 0"/>
                     </svg>
@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    @if (!$this->stats())
+    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(!$this->stats()): ?>
         <div class="empty">
             <div class="empty-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="icon text-muted">
@@ -31,60 +31,60 @@
             <p class="empty-title">Tidak ada data RPS</p>
             <p class="empty-subtitle text-secondary">Mulai buat RPS pertama Anda</p>
             <div class="empty-action">
-                <a href="{{ route('rps.create') }}" class="btn btn-primary">Buat RPS Baru</a>
+                <a href="<?php echo e(route('rps.create')); ?>" class="btn btn-primary">Buat RPS Baru</a>
             </div>
         </div>
-    @else
+    <?php else: ?>
         <div class="row mb-3">
             <div class="col-md-2 col-sm-4 col-6 mb-2">
-                <a href="{{ route('rps.index') }}" class="card card-link card-link-pop">
+                <a href="<?php echo e(route('rps.index')); ?>" class="card card-link card-link-pop">
                     <div class="card-body p-3 text-center">
-                        <div class="h1 m-0">{{ $this->stats()['total'] }}</div>
+                        <div class="h1 m-0"><?php echo e($this->stats()['total']); ?></div>
                         <div class="text-secondary">Total RPS</div>
                     </div>
                 </a>
             </div>
             <div class="col-md-2 col-sm-4 col-6 mb-2">
-                <a href="{{ route('rps.index') }}" class="card card-link card-link-pop">
+                <a href="<?php echo e(route('rps.index')); ?>" class="card card-link card-link-pop">
                     <div class="card-status-start bg-yellow"></div>
                     <div class="card-body p-3 text-center">
-                        <div class="h1 m-0">{{ $this->stats()['draft'] }}</div>
+                        <div class="h1 m-0"><?php echo e($this->stats()['draft']); ?></div>
                         <div class="text-secondary">Draft</div>
                     </div>
                 </a>
             </div>
             <div class="col-md-2 col-sm-4 col-6 mb-2">
-                <a href="{{ route('rps.index') }}" class="card card-link card-link-pop">
+                <a href="<?php echo e(route('rps.index')); ?>" class="card card-link card-link-pop">
                     <div class="card-status-start bg-blue"></div>
                     <div class="card-body p-3 text-center">
-                        <div class="h1 m-0">{{ $this->stats()['review'] }}</div>
+                        <div class="h1 m-0"><?php echo e($this->stats()['review']); ?></div>
                         <div class="text-secondary">Dalam Review</div>
                     </div>
                 </a>
             </div>
             <div class="col-md-2 col-sm-4 col-6 mb-2">
-                <a href="{{ route('rps.index') }}" class="card card-link card-link-pop">
+                <a href="<?php echo e(route('rps.index')); ?>" class="card card-link card-link-pop">
                     <div class="card-status-start bg-green"></div>
                     <div class="card-body p-3 text-center">
-                        <div class="h1 m-0">{{ $this->stats()['approved'] }}</div>
+                        <div class="h1 m-0"><?php echo e($this->stats()['approved']); ?></div>
                         <div class="text-secondary">Disetujui</div>
                     </div>
                 </a>
             </div>
             <div class="col-md-2 col-sm-4 col-6 mb-2">
-                <a href="{{ route('rps.index') }}" class="card card-link card-link-pop">
+                <a href="<?php echo e(route('rps.index')); ?>" class="card card-link card-link-pop">
                     <div class="card-status-start bg-orange"></div>
                     <div class="card-body p-3 text-center">
-                        <div class="h1 m-0">{{ $this->stats()['revision'] }}</div>
+                        <div class="h1 m-0"><?php echo e($this->stats()['revision']); ?></div>
                         <div class="text-secondary">Perlu Revisi</div>
                     </div>
                 </a>
             </div>
             <div class="col-md-2 col-sm-4 col-6 mb-2">
-                <a href="{{ route('rps.index') }}" class="card card-link card-link-pop">
+                <a href="<?php echo e(route('rps.index')); ?>" class="card card-link card-link-pop">
                     <div class="card-status-start bg-teal"></div>
                     <div class="card-body p-3 text-center">
-                        <div class="h1 m-0">{{ $this->stats()['published'] }}</div>
+                        <div class="h1 m-0"><?php echo e($this->stats()['published']); ?></div>
                         <div class="text-secondary">Published</div>
                     </div>
                 </a>
@@ -97,7 +97,7 @@
                     <div class="card-header">
                         <h3 class="card-title">RPS Terbaru</h3>
                         <div class="card-actions">
-                            <a href="{{ route('rps.index') }}" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
+                            <a href="<?php echo e(route('rps.index')); ?>" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
                         </div>
                     </div>
                     <div class="card-body p-0">
@@ -113,33 +113,34 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($this->recentRps() as $rps)
+                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $this->recentRps(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $rps): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr>
                                             <td>
-                                                <div class="fw-bold">{{ $rps->mataKuliah?->name ?? '-' }}</div>
-                                                <div class="text-secondary small">{{ $rps->mataKuliah?->code ?? '' }}</div>
+                                                <div class="fw-bold"><?php echo e($rps->mataKuliah?->name ?? '-'); ?></div>
+                                                <div class="text-secondary small"><?php echo e($rps->mataKuliah?->code ?? ''); ?></div>
                                             </td>
-                                            <td class="text-secondary">{{ $rps->semester?->name ?? '-' }}</td>
+                                            <td class="text-secondary"><?php echo e($rps->semester?->name ?? '-'); ?></td>
                                             <td>
-                                                <span class="badge {{ $this->getStatusBadge($rps->status) }}">
-                                                    {{ $rps->status->label() }}
+                                                <span class="badge <?php echo e($this->getStatusBadge($rps->status)); ?>">
+                                                    <?php echo e($rps->status->label()); ?>
+
                                                 </span>
                                             </td>
-                                            <td class="text-secondary small">{{ $rps->updated_at->diffForHumans() }}</td>
+                                            <td class="text-secondary small"><?php echo e($rps->updated_at->diffForHumans()); ?></td>
                                             <td>
-                                                <a href="{{ route('rps.edit', ['rpsId' => $rps->id]) }}" class="btn btn-sm btn-icon btn-ghost-primary" title="Edit">
+                                                <a href="<?php echo e(route('rps.edit', ['rpsId' => $rps->id])); ?>" class="btn btn-sm btn-icon btn-ghost-primary" title="Edit">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"/><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"/><path d="M16 5l3 3"/>
                                                     </svg>
                                                 </a>
                                             </td>
                                         </tr>
-                                    @endforeach
-                                    @if ($this->recentRps()->isEmpty())
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($this->recentRps()->isEmpty()): ?>
                                         <tr>
                                             <td colspan="5" class="text-center text-secondary py-4">Belum ada RPS</td>
                                         </tr>
-                                    @endif
+                                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
@@ -153,15 +154,15 @@
                         <h3 class="card-title">Akses Cepat</h3>
                     </div>
                     <div class="list-group list-group-flush">
-                        <a href="{{ route('rps.create') }}" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <a href="<?php echo e(route('rps.create')); ?>" class="list-group-item list-group-item-action d-flex align-items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon me-2 text-primary"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14"/><path d="M5 12l14 0"/></svg>
                             Buat RPS Baru
                         </a>
-                        <a href="{{ route('rps.index') }}" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <a href="<?php echo e(route('rps.index')); ?>" class="list-group-item list-group-item-action d-flex align-items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon me-2 text-yellow"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.066 2.573c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.573 1.066c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.066 -2.573c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"/><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/></svg>
                             Lanjutkan Draft
                         </a>
-                        <a href="{{ route('review.list') }}" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <a href="<?php echo e(route('review.list')); ?>" class="list-group-item list-group-item-action d-flex align-items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="icon me-2 text-blue"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 12l2 2l4 -4"/><path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z"/></svg>
                             Review Saya
                         </a>
@@ -177,7 +178,7 @@
                         <h3 class="card-title">Notifikasi</h3>
                     </div>
                     <div class="list-group list-group-flush">
-                        @foreach ($this->notifications() as $notification)
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $this->notifications(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $notification): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="list-group-item">
                                 <div class="d-flex">
                                     <div class="me-2">
@@ -186,18 +187,19 @@
                                         </span>
                                     </div>
                                     <div>
-                                        <div class="small text-secondary">{{ \Illuminate\Support\Str::title(str_replace('_', ' ', $notification->action)) }}</div>
-                                        <div class="text-muted small">{{ $notification->created_at->diffForHumans() }}</div>
+                                        <div class="small text-secondary"><?php echo e(\Illuminate\Support\Str::title(str_replace('_', ' ', $notification->action))); ?></div>
+                                        <div class="text-muted small"><?php echo e($notification->created_at->diffForHumans()); ?></div>
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
-                        @if ($this->notifications()->isEmpty())
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($this->notifications()->isEmpty()): ?>
                             <div class="list-group-item text-center text-secondary py-4">Belum ada notifikasi</div>
-                        @endif
+                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                     </div>
                 </div>
             </div>
         </div>
-    @endif
+    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 </div>
+<?php /**PATH E:\laragon\www\rps-obe\resources\views/livewire/dashboard/dosen-dashboard.blade.php ENDPATH**/ ?>

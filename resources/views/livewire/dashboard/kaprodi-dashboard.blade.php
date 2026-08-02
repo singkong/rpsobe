@@ -10,15 +10,15 @@
                     </ol>
                 </div>
             </div>
-            @if($prodi)
+            @if ($this->prodi())
                 <div class="col-auto">
-                    <span class="badge bg-azure-lt fs-5">{{ $prodi->name }} ({{ $prodi->code }})</span>
+                    <span class="badge bg-azure-lt fs-5">{{ $this->prodi()->name }} ({{ $this->prodi()->code }})</span>
                 </div>
             @endif
         </div>
     </div>
 
-    @if(!$stats)
+    @if (!$this->stats())
         <div class="empty">
             <div class="empty-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="icon text-muted">
@@ -29,12 +29,11 @@
             <p class="empty-subtitle text-secondary">Hubungi administrator untuk mengaitkan akun Anda dengan program studi</p>
         </div>
     @else
-        {{-- Stats Cards --}}
         <div class="row mb-3">
             <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2">
                 <div class="card">
                     <div class="card-body p-3 text-center">
-                        <div class="h1 m-0">{{ $stats['total'] }}</div>
+                        <div class="h1 m-0">{{ $this->stats()['total'] }}</div>
                         <div class="text-secondary">Total RPS</div>
                     </div>
                 </div>
@@ -42,7 +41,7 @@
             <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2">
                 <div class="card">
                     <div class="card-body p-3 text-center">
-                        <div class="h1 m-0">{{ $stats['published'] }}</div>
+                        <div class="h1 m-0">{{ $this->stats()['published'] }}</div>
                         <div class="text-secondary">Completed</div>
                     </div>
                 </div>
@@ -50,7 +49,7 @@
             <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2">
                 <div class="card">
                     <div class="card-body p-3 text-center">
-                        <div class="h1 m-0">{{ $stats['review'] }}</div>
+                        <div class="h1 m-0">{{ $this->stats()['review'] }}</div>
                         <div class="text-secondary">In Review</div>
                     </div>
                 </div>
@@ -58,7 +57,7 @@
             <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2">
                 <div class="card">
                     <div class="card-body p-3 text-center">
-                        <div class="h1 m-0">{{ $stats['approved'] }}</div>
+                        <div class="h1 m-0">{{ $this->stats()['approved'] }}</div>
                         <div class="text-secondary">Approved</div>
                     </div>
                 </div>
@@ -66,7 +65,7 @@
             <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2">
                 <div class="card">
                     <div class="card-body p-3 text-center">
-                        <div class="h1 m-0">{{ $stats['draft'] }}</div>
+                        <div class="h1 m-0">{{ $this->stats()['draft'] }}</div>
                         <div class="text-secondary">Draft</div>
                     </div>
                 </div>
@@ -75,30 +74,28 @@
                 <div class="card">
                     <div class="card-status-top bg-green"></div>
                     <div class="card-body p-3 text-center">
-                        <div class="h1 m-0">{{ $stats['completionRate'] }}%</div>
+                        <div class="h1 m-0">{{ $this->stats()['completionRate'] }}%</div>
                         <div class="text-secondary">Completion Rate</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- Progress Bar --}}
         <div class="card mb-3">
             <div class="card-body">
                 <div class="d-flex align-items-center mb-2">
                     <strong>Progress Semester Ini</strong>
-                    <span class="ms-auto">{{ $stats['published'] }} / {{ $stats['totalMataKuliah'] }} RPS Completed</span>
+                    <span class="ms-auto">{{ $this->stats()['published'] }} / {{ $this->stats()['totalMataKuliah'] }} RPS Completed</span>
                 </div>
                 <div class="progress">
-                    <div class="progress-bar bg-green" style="width: {{ min($stats['completionRate'], 100) }}%" role="progressbar" aria-valuenow="{{ $stats['completionRate'] }}" aria-valuemin="0" aria-valuemax="100">
-                        <span>{{ $stats['completionRate'] }}%</span>
+                    <div class="progress-bar bg-green" style="width: {{ min($this->stats()['completionRate'], 100) }}%" role="progressbar" aria-valuenow="{{ $this->stats()['completionRate'] }}" aria-valuemin="0" aria-valuemax="100">
+                        <span>{{ $this->stats()['completionRate'] }}%</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="row mb-3">
-            {{-- Status Distribution Bar Chart --}}
             <div class="col-lg-6">
                 <div class="card h-100">
                     <div class="card-header">
@@ -106,7 +103,7 @@
                     </div>
                     <div class="card-body">
                         @php
-                            $maxVal = max(array_values($statusCounts) ?: [1]);
+                            $maxVal = max(array_values($this->statusCounts()) ?: [1]);
                             $colors = [
                                 'draft' => '#f59f00',
                                 'review' => '#206bc4',
@@ -116,11 +113,11 @@
                                 'archived' => '#616876',
                             ];
                         @endphp
-                        @foreach($statusCounts as $status => $count)
+                        @foreach ($this->statusCounts() as $status => $count)
                             @php
                                 $label = \App\Enums\RPSStatus::from($status)->label();
                                 $color = $colors[$status] ?? '#616876';
-                                $pct = $stats['total'] > 0 ? round(($count / $stats['total']) * 100, 1) : 0;
+                                $pct = ($this->stats())['total'] > 0 ? round(($count / ($this->stats())['total']) * 100, 1) : 0;
                             @endphp
                             <div class="mb-2">
                                 <div class="d-flex justify-content-between small mb-1">
@@ -136,7 +133,6 @@
                 </div>
             </div>
 
-            {{-- Dosen Progress --}}
             <div class="col-lg-6">
                 <div class="card h-100">
                     <div class="card-header">
@@ -153,7 +149,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($dosenProgress as $dp)
+                                    @foreach ($this->dosenProgress() as $dp)
                                         <tr>
                                             <td>
                                                 <div class="fw-bold">{{ $dp['name'] }}</div>
@@ -169,11 +165,12 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    @empty
+                                    @endforeach
+                                    @if (empty($this->dosenProgress()))
                                         <tr>
                                             <td colspan="3" class="text-center text-secondary py-4">Belum ada data dosen</td>
                                         </tr>
-                                    @endforelse
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -183,7 +180,6 @@
         </div>
 
         <div class="row">
-            {{-- RPS Menunggu Review --}}
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-header">
@@ -201,7 +197,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($this->rpsMenungguReview as $rps)
+                                    @foreach ($this->rpsMenungguReview() as $rps)
                                         <tr>
                                             <td>
                                                 <div class="fw-bold">{{ $rps->mataKuliah?->name ?? '-' }}</div>
@@ -213,11 +209,12 @@
                                                 <a href="{{ route('rps.review', ['rpsId' => $rps->id]) }}" class="btn btn-sm btn-outline-blue">Review</a>
                                             </td>
                                         </tr>
-                                    @empty
+                                    @endforeach
+                                    @if ($this->rpsMenungguReview()->isEmpty())
                                         <tr>
                                             <td colspan="4" class="text-center text-secondary py-4">Tidak ada RPS menunggu review</td>
                                         </tr>
-                                    @endforelse
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -225,7 +222,6 @@
                 </div>
             </div>
 
-            {{-- RPS Menunggu Approval --}}
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-header">
@@ -243,7 +239,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($this->rpsMenungguApproval as $rps)
+                                    @foreach ($this->rpsMenungguApproval() as $rps)
                                         <tr>
                                             <td>
                                                 <div class="fw-bold">{{ $rps->mataKuliah?->name ?? '-' }}</div>
@@ -255,11 +251,12 @@
                                                 <a href="{{ route('rps.review', ['rpsId' => $rps->id]) }}" class="btn btn-sm btn-outline-green">Approve</a>
                                             </td>
                                         </tr>
-                                    @empty
+                                    @endforeach
+                                    @if ($this->rpsMenungguApproval()->isEmpty())
                                         <tr>
                                             <td colspan="4" class="text-center text-secondary py-4">Tidak ada RPS menunggu approval</td>
                                         </tr>
-                                    @endforelse
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -268,7 +265,6 @@
             </div>
         </div>
 
-        {{-- Quick Actions --}}
         <div class="row mt-3">
             <div class="col-12">
                 <div class="card">

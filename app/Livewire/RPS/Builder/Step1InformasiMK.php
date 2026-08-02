@@ -1,6 +1,8 @@
 <?php
 
-use function Livewire\Volt\{state, mount, rules, on};
+namespace App\Livewire\RPS\Builder;
+
+use Livewire\Component;
 use App\Models\RPS;
 use App\Models\Kurikulum;
 use App\Models\MataKuliah;
@@ -10,213 +12,137 @@ use App\Models\ProgramStudi;
 use App\Services\RPSService;
 use Illuminate\Support\Facades\Auth;
 
-state('rpsId', null);
-state('rps', null);
-state('kurikulum_id', null);
-state('mata_kuliah_id', null);
-state('semester_id', null);
-state('dosen_pengampu', []);
-state('deskripsi', '');
-state('selectedKurikulum', null);
-state('selectedMK', null);
+class Step1InformasiMK extends Component
+{
+    public $rpsId = null;
+    public $rps = null;
+    public $kurikulum_id = null;
+    public $mata_kuliah_id = null;
+    public $semester_id = null;
+    public array $dosen_pengampu = [];
+    public string $deskripsi = '';
+    public $selectedKurikulum = null;
+    public $selectedMK = null;
 
-state('kurikulumList', []);
-state('mataKuliahList', []);
-state('semesterList', []);
-state('dosenList', []);
+    public $kurikulumList = [];
+    public $mataKuliahList = [];
+    public $semesterList = [];
+    public $dosenList = [];
 
-rules([
-    'kurikulum_id' => ['required'],
-    'mata_kuliah_id' => ['required'],
-    'semester_id' => ['required'],
-    'deskripsi' => ['required', 'string'],
-]);
+    protected function rules(): array
+    {
+        return [
+            'kurikulum_id' => ['required'],
+            'mata_kuliah_id' => ['required'],
+            'semester_id' => ['required'],
+            'deskripsi' => ['required', 'string'],
+        ];
+    }
 
-mount(function ($rpsId) {
-    $this->rpsId = $rpsId;
+    public function mount($rpsId): void
+    {
+        $this->rpsId = $rpsId;
 
-    $user = Auth::user();
+        $user = Auth::user();
 
-    $this->kurikulumList = Kurikulum::where('is_active', true)
-        ->when($user->tenant_id && !$user->hasRole('super-admin'), function ($q) use ($user) {
-            $q->whereHas('programStudi', function ($q2) use ($user) {
-                $q2->where('tenant_id', $user->tenant_id);
-            });
-        })
-        ->with('programStudi')
-        ->get();
+        $this->kurikulumList = Kurikulum::where('is_active', true)
+            ->when($user->tenant_id && !$user->hasRole('super-admin'), function ($q) use ($user) {
+                $q->whereHas('programStudi', function ($q2) use ($user) {
+                    $q2->where('tenant_id', $user->tenant_id);
+                });
+            })
+            ->with('programStudi')
+            ->get();
 
-    $this->semesterList = Semester::where('is_active', true)->get();
+        $this->semesterList = Semester::where('is_active', true)->get();
 
-    $this->dosenList = Dosen::when($user->tenant_id && !$user->hasRole('super-admin'), function ($q) use ($user) {
-        $q->where('tenant_id', $user->tenant_id);
-    })->where('is_active', true)->get();
+        $this->dosenList = Dosen::when($user->tenant_id && !$user->hasRole('super-admin'), function ($q) use ($user) {
+            $q->where('tenant_id', $user->tenant_id);
+        })->where('is_active', true)->get();
 
-    if ($this->rpsId) {
-        $rps = RPS::findOrFail($this->rpsId);
-        $this->rps = $rps;
-        $mk = $rps->mataKuliah;
+        if ($this->rpsId) {
+            $rps = RPS::findOrFail($this->rpsId);
+            $this->rps = $rps;
+            $mk = $rps->mataKuliah;
 
-        if ($mk) {
-            $this->mata_kuliah_id = $rps->mata_kuliah_id;
-            $this->kurikulum_id = $mk->kurikulum_id;
-            $this->semester_id = $rps->semester_id;
-            $this->deskripsi = $rps->deskripsi ?? '';
-            $this->dosen_pengampu = $rps->dosen_pengampu_json ?? [];
+            if ($mk) {
+                $this->mata_kuliah_id = $rps->mata_kuliah_id;
+                $this->kurikulum_id = $mk->kurikulum_id;
+                $this->semester_id = $rps->semester_id;
+                $this->deskripsi = $rps->deskripsi ?? '';
+                $this->dosen_pengampu = $rps->dosen_pengampu ?? [];
 
-            $this->selectedKurikulum = Kurikulum::with('programStudi')->find($mk->kurikulum_id);
-            $this->selectedMK = $mk;
-            $this->loadMataKuliahOptions();
+                $this->selectedKurikulum = Kurikulum::with('programStudi')->find($mk->kurikulum_id);
+                $this->selectedMK = $mk;
+                $this->loadMataKuliahOptions();
+            }
         }
     }
-});
 
-$loadMataKuliahOptions = function () {
-    if ($this->kurikulum_id) {
-        $this->mataKuliahList = MataKuliah::where('kurikulum_id', $this->kurikulum_id)
-            ->orderBy('semester')
-            ->orderBy('name')
-            ->get();
-    } else {
-        $this->mataKuliahList = collect();
-    }
-};
-
-$updatedKurikulumId = function ($value) {
-    $this->kurikulum_id = $value;
-    $this->mata_kuliah_id = null;
-    $this->selectedMK = null;
-    $this->selectedKurikulum = Kurikulum::with('programStudi')->find($value);
-    $this->loadMataKuliahOptions();
-};
-
-$updatedMataKuliahId = function ($value) {
-    $this->mata_kuliah_id = $value;
-    if ($value) {
-        $this->selectedMK = MataKuliah::find($value);
-    }
-};
-
-$toggleDosen = function ($dosenId) {
-    if (in_array($dosenId, $this->dosen_pengampu)) {
-        $this->dosen_pengampu = array_values(array_filter($this->dosen_pengampu, fn ($id) => $id != $dosenId));
-    } else {
-        $this->dosen_pengampu[] = $dosenId;
-    }
-};
-
-$save = function () {
-    $this->validate();
-
-    if ($this->rps && $this->rps->exists) {
-        $this->rps->update([
-            'mata_kuliah_id' => $this->mata_kuliah_id,
-            'semester_id' => $this->semester_id,
-            'dosen_pengampu_json' => $this->dosen_pengampu,
-            'deskripsi' => $this->deskripsi,
-        ]);
-    } else {
-        $service = app(RPSService::class);
-        $this->rps = $service->create([
-            'mata_kuliah_id' => $this->mata_kuliah_id,
-            'semester_id' => $this->semester_id,
-            'dosen_pengampu_json' => $this->dosen_pengampu,
-            'deskripsi' => $this->deskripsi,
-        ]);
+    public function updatedKurikulumId($value): void
+    {
+        $this->kurikulum_id = $value;
+        $this->mata_kuliah_id = null;
+        $this->selectedMK = null;
+        $this->selectedKurikulum = Kurikulum::with('programStudi')->find($value);
+        $this->loadMataKuliahOptions();
     }
 
-    $this->dispatch('rps-saved', rpsId: $this->rps->id);
-};
+    public function updatedMataKuliahId($value): void
+    {
+        $this->mata_kuliah_id = $value;
+        if ($value) {
+            $this->selectedMK = MataKuliah::find($value);
+        }
+    }
 
-?>
+    public function loadMataKuliahOptions(): void
+    {
+        if ($this->kurikulum_id) {
+            $this->mataKuliahList = MataKuliah::where('kurikulum_id', $this->kurikulum_id)
+                ->orderBy('semester')
+                ->orderBy('name')
+                ->get();
+        } else {
+            $this->mataKuliahList = collect();
+        }
+    }
 
-<div>
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Informasi Mata Kuliah</h3>
-            <?php if($rps && $rps->exists): ?>
-                <span class="badge bg-green-lt ms-auto"><?= $rps->mataKuliah->name ?? 'Belum dipilih' ?></span>
-            
-        </div>
-        <div class="card-body">
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label required">Kurikulum</label>
-                    <select wire:model.live="kurikulum_id" class="form-select is-invalid">
-                        <option value="">-- Pilih Kurikulum --</option>
-                        <?php foreach($kurikulumList as $k): ?>
-                            <option value="<?= $k->id ?>"><?= $k->name ?> (<?= $k->programStudi->name ?? '' ?>)</option>
-                        <?php endforeach; ?>
-                    </select>
-                    <div class="invalid-feedback"><?= (isset(`$errors) ? `$errors->first('kurikulum_id') ?></div>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label required">Mata Kuliah</label>
-                    <select wire:model.live="mata_kuliah_id" class="form-select is-invalid" <?= !$kurikulum_id ? 'disabled' : '' ?>>
-                        <option value="">-- Pilih Mata Kuliah --</option>
-                        <?php foreach($mataKuliahList as $mk): ?>
-                            <option value="<?= $mk->id ?>"><?= $mk->code ?> - <?= $mk->name ?> (<?= $mk->sks ?> SKS)</option>
-                        <?php endforeach; ?>
-                    </select>
-                    <div class="invalid-feedback"><?= (isset(`$errors) ? `$errors->first('mata_kuliah_id') ?></div>
-                </div>
-            </div>
+    public function toggleDosen(int $dosenId): void
+    {
+        if (in_array($dosenId, $this->dosen_pengampu)) {
+            $this->dosen_pengampu = array_values(array_filter($this->dosen_pengampu, fn($id) => $id != $dosenId));
+        } else {
+            $this->dosen_pengampu[] = $dosenId;
+        }
+    }
 
-            <?php if($selectedMK): ?>
-                <div class="card card-sm bg-primary-lt mb-3">
-                    <div class="card-body">
-                        <div class="d-flex gap-3">
-                            <div><strong>Kode:</strong> <?= $selectedMK->code ?></div>
-                            <div><strong><?= $selectedMK->name ?></strong></div>
-                            <div><strong>SKS:</strong> <?= $selectedMK->sks ?></div>
-                            <div><strong>Semester:</strong> <?= $selectedMK->semester ?></div>
-                            <div><strong>Jenis:</strong> <?= ucfirst($selectedMK->jenis) ?></div>
-                        </div>
-                    </div>
-                </div>
-            
+    public function save(): void
+    {
+        $this->validate();
 
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label required">Semester</label>
-                    <select wire:model="semester_id" class="form-select is-invalid">
-                        <option value="">-- Pilih Semester --</option>
-                        <?php foreach($semesterList as $s): ?>
-                            <option value="<?= $s->id ?>"><?= $s->name ?> (<?= $s->tahun_akademik ?>)</option>
-                        <?php endforeach; ?>
-                    </select>
-                    <div class="invalid-feedback"><?= (isset(`$errors) ? `$errors->first('semester_id') ?></div>
-                </div>
-            </div>
+        if ($this->rps && $this->rps->exists) {
+            $this->rps->update([
+                'mata_kuliah_id' => $this->mata_kuliah_id,
+                'semester_id' => $this->semester_id,
+                'dosen_pengampu_json' => $this->dosen_pengampu,
+                'deskripsi' => $this->deskripsi,
+            ]);
+        } else {
+            $service = app(RPSService::class);
+            $this->rps = $service->create([
+                'mata_kuliah_id' => $this->mata_kuliah_id,
+                'semester_id' => $this->semester_id,
+                'dosen_pengampu_json' => $this->dosen_pengampu,
+                'deskripsi' => $this->deskripsi,
+            ]);
+        }
 
-            <div class="mb-3">
-                <label class="form-label">Dosen Pengampu</label>
-                <div class="row">
-                    <?php foreach($dosenList as $dosen): ?>
-                        <div class="col-md-4 mb-2">
-                            <label class="form-check">
-                                <input type="checkbox" class="form-check-input"
-                                       wire:change="toggleDosen(<?= $dosen->id ?>)"
-                                       <?= in_array($dosen->id, $dosen_pengampu) ? 'checked' : '' ?>>
-                                <span class="form-check-label"><?= $dosen->name ?><?= $dosen->nidn ? ' (NIDN: ' . $dosen->nidn . ')' : '' ?></span>
-                            </label>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
+        $this->dispatch('rps-saved', rpsId: $this->rps->id);
+    }
 
-            <div class="mb-3">
-                <label class="form-label required">Deskripsi Mata Kuliah</label>
-                <textarea wire:model="deskripsi" class="form-control" rows="4" placeholder="Deskripsi singkat mata kuliah..."></textarea>
-                <div class="invalid-feedback"><?= (isset(`$errors) ? `$errors->first('deskripsi') ?></div>
-            </div>
-
-            <div class="d-flex justify-content-end">
-                <button wire:click="save" class="btn btn-primary" wire:loading.attr="disabled">
-                    <span wire:loading.remove wire:target="save">Simpan & Lanjutkan</span>
-                    <span wire:loading wire:target="save">Menyimpan...</span>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+    public function render()
+    {
+        return view('livewire.rps.builder.step1-informasi-mk');
+    }
+}
