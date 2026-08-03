@@ -47,7 +47,7 @@ class Step1InformasiMK extends Component
 
         $this->kurikulumList = Kurikulum::where('is_active', true)
             ->when($user->tenant_id && !$user->hasRole('super-admin'), function ($q) use ($user) {
-                $q->whereHas('programStudi', function ($q2) use ($user) {
+                $q->whereHas('programStudi.fakultas', function ($q2) use ($user) {
                     $q2->where('tenant_id', $user->tenant_id);
                 });
             })
