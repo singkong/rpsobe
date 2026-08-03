@@ -125,7 +125,10 @@
                             <span class="avatar avatar-sm">{{ substr(auth()->user()->name, 0, 1) }}</span>
                             <div class="d-none d-xl-block ps-2">
                                 <div class="text-truncate" style="max-width:120px">{{ auth()->user()->name }}</div>
-                                <div class="mt-1 small text-secondary">{{ auth()->user()->roles->first()->name ?? 'User' }}</div>
+                                <div class="mt-1 small text-secondary">@php
+    $roleLabels = ['super-admin' => 'Super Admin', 'admin-univ' => 'Admin Universitas', 'admin-fakultas' => 'Admin Fakultas', 'admin-prodi' => 'Admin Prodi', 'kaprodi' => 'Kaprodi', 'reviewer' => 'Reviewer', 'dosen' => 'Dosen', 'lpm' => 'LPM', 'mahasiswa' => 'Mahasiswa'];
+@endphp
+{{ $roleLabels[auth()->user()->roles->first()->name ?? 'dosen'] ?? 'User' }}</div>
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
