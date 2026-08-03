@@ -35,6 +35,10 @@ Route::middleware(['auth', 'verified', 'user.active', 'tenant.active', 'tenant']
     Route::view('/dashboard/admin', 'dashboard.admin')->name('dashboard.admin');
 
     // --- Master Data ---
+    // Admin routes for user management
+    Route::view('/admin/users', 'users.index')->name('users.index');
+    Route::view('/admin/templates', 'templates.index')->name('templates.index');
+
     Route::middleware(['can:manage-master-data'])->group(function () {
         Route::view('/admin/master-data', 'master-data.dashboard')->name('master-data.dashboard');
         Route::view('/admin/master-data/fakultas', 'master-data.fakultas')->name('master-data.fakultas');
