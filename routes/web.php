@@ -36,6 +36,7 @@ Route::middleware(['auth', 'verified', 'user.active', 'tenant.active', 'tenant']
 
     // --- Master Data ---
     // Admin routes for user management
+    Route::view('/admin/tenants', 'tenants.index')->name('tenants.index');
     Route::view('/admin/users', 'users.index')->name('users.index');
     Route::view('/admin/templates', 'templates.index')->name('templates.index');
 
