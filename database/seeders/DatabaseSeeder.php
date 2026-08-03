@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
             TenantSeeder::class,
             RolePermissionSeeder::class,
             UserSeeder::class,
-            MasterDataSeeder::class,
+            DummyDataSeeder::class,
         ]);
     }
 }
