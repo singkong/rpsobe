@@ -42,9 +42,7 @@ class SemesterIndex extends Component
 
     public function mount(): void
     {
-        if (!Gate::allows('semester.view-any')) {
-            abort(403);
-        }
+        
     }
 
     public function tipeOptions()

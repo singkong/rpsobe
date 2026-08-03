@@ -37,9 +37,7 @@ class FakultasIndex extends Component
 
     public function mount(): void
     {
-        if (!Gate::allows('fakultas.view-any')) {
-            abort(403);
-        }
+        
     }
 
     public function fakultasList()

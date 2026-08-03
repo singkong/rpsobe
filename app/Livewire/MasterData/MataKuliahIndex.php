@@ -44,9 +44,7 @@ class MataKuliahIndex extends Component
 
     public function mount(): void
     {
-        if (!Gate::allows('mata-kuliah.view-any')) {
-            abort(403);
-        }
+        
     }
 
     public function kurikulumOptions()

@@ -40,9 +40,7 @@ class CplIndex extends Component
 
     public function mount(): void
     {
-        if (!Gate::allows('cpl.view-any')) {
-            abort(403);
-        }
+        
     }
 
     public function prodiOptions()

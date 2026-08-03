@@ -47,9 +47,7 @@ class DosenIndex extends Component
 
     public function mount(): void
     {
-        if (!Gate::allows('dosen.view-any')) {
-            abort(403);
-        }
+        
     }
 
     public function dosenList()

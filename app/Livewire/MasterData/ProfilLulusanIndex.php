@@ -38,9 +38,7 @@ class ProfilLulusanIndex extends Component
 
     public function mount(): void
     {
-        if (!Gate::allows('profil-lulusan.view-any')) {
-            abort(403);
-        }
+        
     }
 
     public function prodiOptions()
