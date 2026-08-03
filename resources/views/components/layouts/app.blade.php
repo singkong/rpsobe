@@ -18,90 +18,87 @@
                 </button>
                 <h1 class="navbar-brand navbar-brand-autodark">
                     <a href="{{ route('dashboard') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0"/><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0"/><path d="M3 6l0 13"/><path d="M12 6l0 13"/><path d="M21 6l0 13"/>
-                        </svg>
-                        <span class="ms-2">RPS OBE</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0"/><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0"/><path d="M3 6l0 13"/><path d="M12 6l0 13"/><path d="M21 6l0 13"/></svg>
                     </a>
                 </h1>
+                <span class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                    <a href="{{ route('dashboard') }}" class="text-reset text-decoration-none"><strong>RPS</strong> OBE</a>
+                </span>
                 <div class="collapse navbar-collapse" id="sidebar-menu">
                     <ul class="navbar-nav pt-lg-3">
-                        <!-- Dashboard -->
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('dashboard') || request()->routeIs('dashboard.*') ? 'active' : '' }}" href="{{ route('dashboard') }}">
-                                <span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/></svg></span>
+                            <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
+                                <span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler-home"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/></svg></span>
                                 <span class="nav-link-title">Dashboard</span>
                             </a>
                         </li>
 
-                        @if(auth()->user()->can('manage-master-data'))
-                        <!-- Master Data -->
-                        <li class="nav-item dropdown {{ request()->routeIs('master-data.*') ? 'active' : '' }}">
-                            <a class="nav-link dropdown-toggle" href="#sidebar-masterdata" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button">
-                                <span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/><path d="M7 9l5 -5l5 5"/><path d="M12 4l0 12"/></svg></span>
+                        @if(auth()->user()->hasRole(['super-admin','admin-univ','admin-fakultas','admin-prodi','kaprodi']))
+                        <li class="nav-item dropdown {{ request()->routeIs('master-data.*') ? 'show' : '' }}">
+                            <a class="nav-link dropdown-toggle {{ request()->routeIs('master-data.*') ? '' : 'collapsed' }}" href="#sidebar-masterdata" data-bs-toggle="collapse" data-bs-auto-close="false" role="button" aria-expanded="{{ request()->routeIs('master-data.*') ? 'true' : 'false' }}">
+                                <span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler-database"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 6m-8 0a8 3 0 1 0 16 0a8 3 0 1 0 -16 0"/><path d="M4 6v6a8 3 0 0 0 16 0v-6"/><path d="M4 12v6a8 3 0 0 0 16 0v-6"/></svg></span>
                                 <span class="nav-link-title">Master Data</span>
                             </a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item {{ request()->routeIs('master-data.fakultas') ? 'active' : '' }}" href="{{ route('master-data.fakultas') }}">Fakultas</a>
-                                <a class="dropdown-item {{ request()->routeIs('master-data.program-studi') ? 'active' : '' }}" href="{{ route('master-data.program-studi') }}">Program Studi</a>
-                                <a class="dropdown-item {{ request()->routeIs('master-data.kurikulum') ? 'active' : '' }}" href="{{ route('master-data.kurikulum') }}">Kurikulum</a>
-                                <a class="dropdown-item {{ request()->routeIs('master-data.mata-kuliah') ? 'active' : '' }}" href="{{ route('master-data.mata-kuliah') }}">Mata Kuliah</a>
-                                <a class="dropdown-item {{ request()->routeIs('master-data.dosen') ? 'active' : '' }}" href="{{ route('master-data.dosen') }}">Dosen</a>
-                                <a class="dropdown-item {{ request()->routeIs('master-data.cpl') ? 'active' : '' }}" href="{{ route('master-data.cpl') }}">CPL</a>
-                                <a class="dropdown-item {{ request()->routeIs('master-data.profil-lulusan') ? 'active' : '' }}" href="{{ route('master-data.profil-lulusan') }}">Profil Lulusan</a>
-                                <a class="dropdown-item {{ request()->routeIs('master-data.semester') ? 'active' : '' }}" href="{{ route('master-data.semester') }}">Semester</a>
-                                <a class="dropdown-item {{ request()->routeIs('master-data.referensi') ? 'active' : '' }}" href="{{ route('master-data.referensi') }}">Referensi</a>
+                            <div class="collapse {{ request()->routeIs('master-data.*') ? 'show' : '' }}" id="sidebar-masterdata" data-bs-parent="#sidebar-menu">
+                                <ul class="navbar-nav ps-3">
+                                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('master-data.fakultas') ? 'active' : '' }}" href="{{ route('master-data.fakultas') }}">Fakultas</a></li>
+                                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('master-data.program-studi') ? 'active' : '' }}" href="{{ route('master-data.program-studi') }}">Program Studi</a></li>
+                                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('master-data.kurikulum') ? 'active' : '' }}" href="{{ route('master-data.kurikulum') }}">Kurikulum</a></li>
+                                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('master-data.mata-kuliah') ? 'active' : '' }}" href="{{ route('master-data.mata-kuliah') }}">Mata Kuliah</a></li>
+                                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('master-data.dosen') ? 'active' : '' }}" href="{{ route('master-data.dosen') }}">Dosen</a></li>
+                                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('master-data.cpl') ? 'active' : '' }}" href="{{ route('master-data.cpl') }}">CPL</a></li>
+                                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('master-data.profil-lulusan') ? 'active' : '' }}" href="{{ route('master-data.profil-lulusan') }}">Profil Lulusan</a></li>
+                                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('master-data.semester') ? 'active' : '' }}" href="{{ route('master-data.semester') }}">Semester</a></li>
+                                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('master-data.referensi') ? 'active' : '' }}" href="{{ route('master-data.referensi') }}">Referensi</a></li>
+                                </ul>
                             </div>
                         </li>
                         @endif
 
-                        @if(auth()->user()->can('manage-rps'))
-                        <!-- RPS -->
-                        <li class="nav-item dropdown {{ request()->routeIs('rps.*') ? 'active' : '' }}">
-                            <a class="nav-link dropdown-toggle" href="#sidebar-rps" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button">
-                                <span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0"/><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0"/><path d="M3 6l0 13"/><path d="M12 6l0 13"/><path d="M21 6l0 13"/></svg></span>
+                        @if(auth()->user()->hasRole(['super-admin','admin-univ','admin-fakultas','admin-prodi','kaprodi','dosen']))
+                        <li class="nav-item dropdown {{ request()->routeIs('rps.*') ? 'show' : '' }}">
+                            <a class="nav-link dropdown-toggle {{ request()->routeIs('rps.*') ? '' : 'collapsed' }}" href="#sidebar-rps" data-bs-toggle="collapse" data-bs-auto-close="false" role="button" aria-expanded="{{ request()->routeIs('rps.*') ? 'true' : 'false' }}">
+                                <span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler-book"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0"/><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0"/><path d="M3 6l0 13"/><path d="M12 6l0 13"/><path d="M21 6l0 13"/></svg></span>
                                 <span class="nav-link-title">RPS</span>
                             </a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item {{ request()->routeIs('rps.index') ? 'active' : '' }}" href="{{ route('rps.index') }}">Daftar RPS</a>
-                                <a class="dropdown-item {{ request()->routeIs('rps.create') ? 'active' : '' }}" href="{{ route('rps.create') }}">Buat RPS Baru</a>
+                            <div class="collapse {{ request()->routeIs('rps.*') ? 'show' : '' }}" id="sidebar-rps" data-bs-parent="#sidebar-menu">
+                                <ul class="navbar-nav ps-3">
+                                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('rps.index') ? 'active' : '' }}" href="{{ route('rps.index') }}">Daftar RPS</a></li>
+                                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('rps.create') ? 'active' : '' }}" href="{{ route('rps.create') }}">Buat RPS Baru</a></li>
+                                </ul>
                             </div>
                         </li>
                         @endif
 
-                        @if(auth()->user()->can('review-rps'))
-                        <!-- Review -->
+                        @if(auth()->user()->hasRole(['super-admin','reviewer','kaprodi']))
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('review.*') ? 'active' : '' }}" href="{{ route('review.list') }}">
-                                <span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10"/></svg></span>
+                                <span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler-clipboard-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"/><path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"/><path d="M9 14l2 2l4 -4"/></svg></span>
                                 <span class="nav-link-title">Review</span>
                             </a>
                         </li>
                         @endif
 
-                        @if(auth()->user()->can('approve-rps'))
-                        <!-- Approval -->
+                        @if(auth()->user()->hasRole(['super-admin','kaprodi']))
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('approval.*') ? 'active' : '' }}" href="{{ route('approval.list') }}">
-                                <span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 12l2 2l4 -4"/></svg></span>
+                                <span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10"/></svg></span>
                                 <span class="nav-link-title">Approval</span>
                             </a>
                         </li>
                         @endif
 
-                        <!-- Reports -->
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" href="{{ route('reports.index') }}">
-                                <span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12h4l3 8l4 -16l3 8h4"/></svg></span>
+                                <span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler-chart-line"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h16"/><path d="M4 20v-5l4 -2l4 4l4 -6l4 3"/></svg></span>
                                 <span class="nav-link-title">Laporan</span>
                             </a>
                         </li>
 
-                        @if(auth()->user()->can('manage-master-data'))
-                        <!-- Audit -->
+                        @if(auth()->user()->hasRole(['super-admin','admin-univ','lpm']))
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('audit.*') ? 'active' : '' }}" href="{{ route('audit.index') }}">
-                                <span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06 .06a2 2 0 0 1 0 2.83a2 2 0 0 1 -2.83 0l-.06 -.06a1.65 1.65 0 0 0 -1.82 -.33a1.65 1.65 0 0 0 -1 1.51v.17a2 2 0 0 1 -2 2a2 2 0 0 1 -2 -2v-.09a1.65 1.65 0 0 0 -1.08 -1.51a1.65 1.65 0 0 0 -1.82 .33l-.06 .06a2 2 0 0 1 -2.83 0a2 2 0 0 1 0 -2.83l.06 -.06a1.65 1.65 0 0 0 .33 -1.82a1.65 1.65 0 0 0 -1.51 -1h-.17a2 2 0 0 1 -2 -2a2 2 0 0 1 2 -2h.09a1.65 1.65 0 0 0 1.51 -1.08"/></svg></span>
+                                <span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler-history"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 8l0 4l2 2"/><path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5"/></svg></span>
                                 <span class="nav-link-title">Audit Log</span>
                             </a>
                         </li>
