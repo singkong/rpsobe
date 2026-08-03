@@ -37,7 +37,7 @@ class CPMK extends Model
 
     public function rps(): BelongsTo
     {
-        return $this->belongsTo(RPS::class);
+        return $this->belongsTo(RPS::class, 'rps_id');
     }
 
     public function subCpmk(): HasMany

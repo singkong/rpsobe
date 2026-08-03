@@ -82,7 +82,7 @@ class RPS extends Model
 
     public function cpml(): HasMany
     {
-        return $this->hasMany(CPMK::class);
+        return $this->hasMany(CPMK::class, 'rps_id');
     }
 
     public function subCpmk(): HasManyThrough
@@ -92,17 +92,17 @@ class RPS extends Model
 
     public function materiPertemuan(): HasMany
     {
-        return $this->hasMany(MateriPertemuan::class);
+        return $this->hasMany(MateriPertemuan::class, 'rps_id');
     }
 
     public function assessment(): HasMany
     {
-        return $this->hasMany(Assessment::class);
+        return $this->hasMany(Assessment::class, 'rps_id');
     }
 
     public function versions(): HasMany
     {
-        return $this->hasMany(RPSVersion::class);
+        return $this->hasMany(RPSVersion::class, 'rps_id');
     }
 
     public function reviews(): HasMany
