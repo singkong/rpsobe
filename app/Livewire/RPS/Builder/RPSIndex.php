@@ -35,7 +35,7 @@ class RPSIndex extends Component
         $this->semesterList = Semester::where('is_active', true)->get();
 
         $this->mataKuliahList = MataKuliah::when($user->tenant_id && !$user->hasRole('super-admin'), function ($q) use ($user) {
-            $q->whereHas('kurikulum.programStudi', function ($q2) use ($user) {
+            $q->whereHas('kurikulum.programStudi.fakultas', function ($q2) use ($user) {
                 $q2->where('tenant_id', $user->tenant_id);
             });
         })->get();
