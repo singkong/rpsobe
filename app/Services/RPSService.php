@@ -26,7 +26,10 @@ class RPSService
             $data['status'] = $data['status'] ?? RPSStatus::Draft->value;
             $data['version_label'] = $data['version_label'] ?? 'v0.1';
 
-            return RPS::create($data);
+            return RPS::firstOrCreate(
+                ['mata_kuliah_id' => $data['mata_kuliah_id'], 'semester_id' => $data['semester_id']],
+                $data
+            );
         });
     }
 

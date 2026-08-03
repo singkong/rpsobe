@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unique(['mata_kuliah_id', 'semester_id', 'user_id']);
+            $table->unique(['mata_kuliah_id', 'semester_id']);
         });
 
         Schema::table('rps', function (Blueprint $table) {
