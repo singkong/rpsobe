@@ -110,7 +110,7 @@ class RPSService
             3 => $rps->cpml_count > 0 ? 100 : 0,
             4 => $rps->sub_cpmk_count > 0 ? 100 : 0,
             5 => $rps->materi_pertemuan_count > 0 ? 100 : 0,
-            6 => $rps->materi_pertemuan->filter(fn ($m) => !empty($m->metode_pembelajaran))->count() > 0 ? 100 : 0,
+            6 => $rps->materi_pertemuan_count > 0 ? 100 : 0,
             7 => $rps->assessment_count > 0 ? 100 : 0,
             8 => $rps->status === RPSStatus::Published ? 100 : 0,
         ];
