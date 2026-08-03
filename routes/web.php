@@ -39,17 +39,17 @@ Route::middleware(['auth', 'verified', 'user.active', 'tenant.active', 'tenant']
     });
 
     // --- Admin Roles (User Management) ---
-    Route::middleware(['role:super-admin,admin-univ,admin-fakultas,admin-prodi,kaprodi'])->group(function () {
+    Route::middleware(['role:super-admin|admin-univ|admin-fakultas|admin-prodi|kaprodi'])->group(function () {
         Route::view('/admin/users', 'users.index')->name('users.index');
     });
 
     // --- Template Management ---
-    Route::middleware(['role:super-admin,admin-univ,kaprodi'])->group(function () {
+    Route::middleware(['role:super-admin|admin-univ|kaprodi'])->group(function () {
         Route::view('/admin/templates', 'templates.index')->name('templates.index');
     });
 
     // --- Master Data ---
-    Route::middleware(['role:super-admin,admin-univ,admin-fakultas,admin-prodi,kaprodi'])->group(function () {
+    Route::middleware(['role:super-admin|admin-univ|admin-fakultas|admin-prodi|kaprodi'])->group(function () {
         Route::view('/admin/master-data/fakultas', 'master-data.fakultas')->name('master-data.fakultas');
         Route::view('/admin/master-data/prodi', 'master-data.prodi')->name('master-data.program-studi');
         Route::view('/admin/master-data/kurikulum', 'master-data.kurikulum')->name('master-data.kurikulum');
@@ -62,21 +62,21 @@ Route::middleware(['auth', 'verified', 'user.active', 'tenant.active', 'tenant']
     });
 
     // --- RPS ---
-    Route::middleware(['role:super-admin,admin-univ,admin-fakultas,admin-prodi,kaprodi,dosen'])->group(function () {
+    Route::middleware(['role:super-admin|admin-univ|admin-fakultas|admin-prodi|kaprodi|dosen'])->group(function () {
         Route::view('/rps', 'rps.index')->name('rps.index');
         Route::view('/rps/create', 'rps.create')->name('rps.create');
         Route::view('/rps/{rpsId}/edit', 'rps.edit')->name('rps.edit');
     });
 
     // --- Review ---
-    Route::middleware(['role:super-admin,reviewer,kaprodi'])->group(function () {
+    Route::middleware(['role:super-admin|reviewer|kaprodi'])->group(function () {
         Route::view('/rps/{rpsId}/review', 'rps.review')->name('rps.review');
         Route::view('/rps/{rpsId}/history', 'rps.history')->name('rps.history');
         Route::view('/review', 'review.list')->name('review.list');
     });
 
     // --- Approval ---
-    Route::middleware(['role:super-admin,kaprodi'])->group(function () {
+    Route::middleware(['role:super-admin|kaprodi'])->group(function () {
         Route::view('/approval', 'approval.list')->name('approval.list');
         Route::view('/rps/{rpsId}/assign-reviewer', 'rps.assign-reviewer')->name('rps.assign-reviewer');
     });
@@ -94,7 +94,7 @@ Route::middleware(['auth', 'verified', 'user.active', 'tenant.active', 'tenant']
     Route::view('/notifications', 'notifications.index')->name('notifications.index');
 
     // --- Audit ---
-    Route::middleware(['role:super-admin,admin-univ,lpm'])->group(function () {
+    Route::middleware(['role:super-admin|admin-univ|lpm'])->group(function () {
         Route::view('/audit', 'audit.index')->name('audit.index');
     });
 
