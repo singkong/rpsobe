@@ -1,14 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Livewire\Volt\Volt;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\ReportExportController;
 
 Route::get('/', fn () => redirect()->route('dashboard'));
-
-Route::get('/ping', fn () => 'OK');
 
 // --- Guest Routes ---
 Route::middleware('guest')->group(function () {
@@ -28,20 +25,31 @@ Route::middleware('auth')->group(function () {
 // --- Authenticated Routes ---
 Route::middleware(['auth', 'verified', 'user.active', 'tenant.active', 'tenant'])->group(function () {
     Route::view('/dashboard', 'dashboard.index')->name('dashboard');
+
+    // Dashboard by role (accessible by respective roles)
     Route::view('/dashboard/dosen', 'dashboard.dosen')->name('dashboard.dosen');
     Route::view('/dashboard/kaprodi', 'dashboard.kaprodi')->name('dashboard.kaprodi');
     Route::view('/dashboard/fakultas', 'dashboard.fakultas')->name('dashboard.fakultas');
     Route::view('/dashboard/universitas', 'dashboard.universitas')->name('dashboard.universitas');
     Route::view('/dashboard/admin', 'dashboard.admin')->name('dashboard.admin');
 
-    // --- Master Data ---
-    // Admin routes for user management
-    Route::view('/admin/tenants', 'tenants.index')->name('tenants.index');
-    Route::view('/admin/users', 'users.index')->name('users.index');
-    Route::view('/admin/templates', 'templates.index')->name('templates.index');
+    // --- Super Admin Only ---
+    Route::middleware(['role:super-admin'])->group(function () {
+        Route::view('/admin/tenants', 'tenants.index')->name('tenants.index');
+    });
 
-    Route::middleware(['can:manage-master-data'])->group(function () {
-        Route::view('/admin/master-data', 'master-data.dashboard')->name('master-data.dashboard');
+    // --- Admin Roles (User Management) ---
+    Route::middleware(['role:super-admin,admin-univ,admin-fakultas,admin-prodi,kaprodi'])->group(function () {
+        Route::view('/admin/users', 'users.index')->name('users.index');
+    });
+
+    // --- Template Management ---
+    Route::middleware(['role:super-admin,admin-univ,kaprodi'])->group(function () {
+        Route::view('/admin/templates', 'templates.index')->name('templates.index');
+    });
+
+    // --- Master Data ---
+    Route::middleware(['role:super-admin,admin-univ,admin-fakultas,admin-prodi,kaprodi'])->group(function () {
         Route::view('/admin/master-data/fakultas', 'master-data.fakultas')->name('master-data.fakultas');
         Route::view('/admin/master-data/prodi', 'master-data.prodi')->name('master-data.program-studi');
         Route::view('/admin/master-data/kurikulum', 'master-data.kurikulum')->name('master-data.kurikulum');
@@ -53,26 +61,27 @@ Route::middleware(['auth', 'verified', 'user.active', 'tenant.active', 'tenant']
         Route::view('/admin/master-data/referensi', 'master-data.referensi')->name('master-data.referensi');
     });
 
-    // --- RPS Builder ---
-    Route::middleware(['can:manage-rps'])->group(function () {
+    // --- RPS ---
+    Route::middleware(['role:super-admin,admin-univ,admin-fakultas,admin-prodi,kaprodi,dosen'])->group(function () {
         Route::view('/rps', 'rps.index')->name('rps.index');
         Route::view('/rps/create', 'rps.create')->name('rps.create');
         Route::view('/rps/{rpsId}/edit', 'rps.edit')->name('rps.edit');
     });
 
-    // --- Workflow ---
-    Route::middleware(['can:review-rps'])->group(function () {
+    // --- Review ---
+    Route::middleware(['role:super-admin,reviewer,kaprodi'])->group(function () {
         Route::view('/rps/{rpsId}/review', 'rps.review')->name('rps.review');
         Route::view('/rps/{rpsId}/history', 'rps.history')->name('rps.history');
         Route::view('/review', 'review.list')->name('review.list');
     });
 
-    Route::middleware(['can:approve-rps'])->group(function () {
+    // --- Approval ---
+    Route::middleware(['role:super-admin,kaprodi'])->group(function () {
         Route::view('/approval', 'approval.list')->name('approval.list');
         Route::view('/rps/{rpsId}/assign-reviewer', 'rps.assign-reviewer')->name('rps.assign-reviewer');
     });
 
-    // --- Reports ---
+    // --- Reports (all authenticated) ---
     Route::view('/reports', 'reports.index')->name('reports.index');
     Route::get('/reports/export/excel', [ReportExportController::class, 'exportExcel'])->name('reports.export-excel');
     Route::get('/reports/export/pdf', [ReportExportController::class, 'exportPdf'])->name('reports.export-pdf');
@@ -81,11 +90,11 @@ Route::middleware(['auth', 'verified', 'user.active', 'tenant.active', 'tenant']
     Route::get('/rps/{rpsId}/export/{format}', [ExportController::class, 'download'])->name('rps.export.download');
     Route::post('/rps/batch-export', [ExportController::class, 'batchExport'])->name('rps.batch-export');
 
-    // --- Notifications ---
+    // --- Notifications (all authenticated) ---
     Route::view('/notifications', 'notifications.index')->name('notifications.index');
 
     // --- Audit ---
-    Route::middleware(['can:manage-master-data'])->group(function () {
+    Route::middleware(['role:super-admin,admin-univ,lpm'])->group(function () {
         Route::view('/audit', 'audit.index')->name('audit.index');
     });
 
